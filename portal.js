@@ -8,6 +8,7 @@ let engine = require('ejs-locals');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var alert = require('alert');
+const PATH = require('path');
 require('dotenv').config({ path: PATH.resolve(__dirname, './.env') });
 var app = express();
 const FS = require('fs');
