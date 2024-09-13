@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+TC:100,300,400,500,700,900&display=swap");
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
+
+html,
+body {
+    height: 100%;
+    font-family: 'Noto Sans Tc', sans-serif;
+    font-size: 15px;
+    background-image: url(http://103.178.37.3:4001/img/vocombackground.png);
+    background-size: cover;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.side-menu {
+    padding: 100px 0;
+    box-sizing: border-box;
+    bottom: 0;
+    width: 200px;
+    height: 100%;
+    background-color: rgb(131, 2, 47);
+    flex-direction: column;
+    /* box-shadow: 5px 0px 10px hsla(240,50%, 30%,.4); */
+    transform: translateX(0);
+    transition: .3s;
+    position: fixed;
+    z-index: 10;
+    font-size: 15px;
+}
+
+.side-menu label {
+    position: absolute;
+    width: 15px;
+    height: 80px;
+    background-color: rgb(180, 0, 0, 0.4);
+    color: rgb(0, 0, 0);
+    right: -15px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    line-height: 80px;
+    text-align: center;
+    font-size: 30px;
+    border-radius: 0 10px 10px 0;
+}
+
+#side-menu-switch,
+#right-text-switch {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+
+#side-menu-switch:checked+.side-menu {
+    transform: translateX(-100%);
+}
+
+#side-menu-switch:checked+.side-menu label .fa {
+    transform: scaleX(-1)
+}
+
+#right-text-switch:checked+.right-text-container .right-text {
+    left: 20px;
+    width: calc(98% - 20px);
+
+}
+
+
+
+.nav {
+    display: inline;
+}
+
+.nav a {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    font-size: 18px;
+}
+
+.nav li+li a::before {
+    content: '';
+    position: absolute;
+    border-top: 1px solid rgb(255, 255, 255, .7);
+    left: 10px;
+    right: 10px;
+    top: 0;
+}
+
+.nav a .fa {
+    margin-right: -1em;
+    transform: scale(0);
+    transition: .3s;
+}
+
+.nav li:hover .fa {
+    margin-right: 0.2em;
+    transform: scale(1);
+}
+
+.nav li:hover>a {
+    background-color: rgba(0, 200, 255, 0.3);
+}
+
+.nav li {
+    position: relative;
+}
+
+.nav ul {
+    position: absolute;
+    display: none;
+    left: 100%;
+    width: 180px;
+    top: 10px;
+    background-color: rgb(12, 0, 0, .7);
+    box-shadow: 5px 0px 10px hsla(240, 50%, 30%, .4);
+    z-index: 2;
+}
+
+.nav li:hover ul {
+    display: block;
+
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+}
+
+.top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    /* 您的 navbar 高度為 60px，這裡假設為 60px */
+    background-color: rgb(255, 250, 250);
+    /* 背景色，這裡假設為白色 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* 設定陰影效果 */
+    z-index: 9999;
+    /* 設定 z-index，保證 navbar 始終位於最上面 */
+}
+
+.top-nav .container {
+    display: flex;
+    /* 設定彈性盒子，使得內部子元素可以靈活排列 */
+    align-items: center;
+    /*垂直居中子元素 */
+    /*justify-content: space-between; 左右兩端對齊 */
+    height: 100%;
+    /* 設定 container 的高度，使得子元素可以垂直居中 */
+    max-width: 1600px;
+    /* 設定 container 的最大寬度，這裡假設為 1200px */
+    margin: 0 auto;
+    /* 設定 container 的左右 margin 為 auto，使得 container 在水平方向上居中 */
+    padding-left: 100px;
+}
+
+.top-nav .top-nav-li {
+    flex-grow: 1;
+    /*將 top-nav-li 填滿 container 的空間*/
+    text-align: center;
+    /* 文字置中對齊 */
+}
+
+.top-nav .logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 180px;
+    height: 80%;
+    margin-right: 10px;
+    
+}
+
+
+
+.top-nav .logout a {
+    display: none;
+}
+
+.top-nav .logout:hover h3 {
+    display: none;
+}
+
+.top-nav .logout:hover a {
+    display: inline;
+    background-color: rgba(84, 218, 255, 0.5);
+}

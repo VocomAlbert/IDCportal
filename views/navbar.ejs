@@ -1,0 +1,53 @@
+<script>
+    function checker(){
+        if( confirm("Are you trying to logout? You will lose all the temporary information during the login this time.")){
+          window.location.href="/idcwebsite/logout"
+        } 
+    }
+
+    function toggleCheckboxes() {
+      var checkbox1 = document.getElementById("side-menu-switch");
+      var checkbox2 = document.getElementById("right-text-switch");
+      checkbox1.checked = !checkbox1.checked;
+      checkbox2.checked = checkbox1.checked;
+    }
+</script>
+
+<div class="top-nav">
+  <div class="container">
+    <li class="top-nav-li">
+      <a href="/idcwebsite/main"><img src="http://103.178.37.3:4001/img/vocom2.png" width="300" height="60" alt="" loading="lazy"></a>
+    </li>
+      <li class="logout">
+        <h3><i class="fa fa-user" aria-hidden="true"></i>&nbsp;<%= account %></h3>
+        <a  onclick='checker()'><i class="fa fa-sign-out" aria-hidden="true"></i></i>Log out</a>
+      </li>
+  </div>
+</div>
+
+<input type ="checkbox" id="side-menu-switch">
+
+<div class="side-menu">
+  <ul class="nav">
+    <li>
+      <a href="/idcwebsite/account"><i class="fa fa-plane" aria-hidden="true"></i> Account</a>
+    </li>
+    <% if (accountLevel <= 1 || accountLevel == 3) { %>
+    <li>
+      <a href="/idcwebsite/idcinfo"><i class="fa fa-globe" aria-hidden="true"></i> IDC Information</a>
+    </li>
+    <li>
+      <a href="/idcwebsite/wishList"><i class="fa fa-globe" aria-hidden="true"></i> IDC Request Form</a>
+    </li>
+    <% } %>
+    <% if (accountLevel <= 1 || accountLevel == 2) { %>
+      <li>
+        <a href="/idcwebsite/modifyIdcInfo"><i class="fa fa-globe" aria-hidden="true"></i> Modify IDC Info</a>
+      </li>
+    <% } %>
+  </ul>
+  <label for="side-menu-switch right-text-switch" onclick="toggleCheckboxes()">
+    <i class="fa fa-angle-left" aria-hidden="true"></i>
+  </label>
+  
+</div>

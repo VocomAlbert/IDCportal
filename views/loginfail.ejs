@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page with Background Image Example</title>
+    <link rel="stylesheet" href="http://103.178.37.3:4001/css/login.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    
+    
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <div id="bg"></div>
+    
+    <form class="form-signin login-window" role="form" method="post" action="/idcwebsite">
+        <div class="text-center" style="border-radius: 24px 24px 0 0;background: rgb(255, 255, 255);color: white; text-align: center; padding-top: 1rem; padding-bottom: 1rem;">
+            <img src="http://103.178.37.3:4001/img/vocom.png" width="100" height="110">
+        </div>
+        <div style=" padding: 36px 30px 50px 30px ;">
+            <div class="form-field">
+            <input id='account' name='account' type="text" placeholder="account" required />
+            </div>
+
+            <div class="form-field">
+                <input id='passWord' name='passWord' type="password" placeholder="Password" required /> 
+            </div>
+                <br>
+            <div class="form-field">
+                <button id="btnSub" class="btn" type="submit" value="login">Log in</button>
+            </div>
+            <div class="alert-warning">
+                <i class="fa fa-times" aria-hidden="true"></i>
+                Log in fail . Please check your account and password
+            </div>
+        </div>
+    </form>
+    
+    
+    <!-- partial -->
+
+</body>
+
+</html>

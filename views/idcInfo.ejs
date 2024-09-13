@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+    <title>IDC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <link rel="stylesheet" href="http://18.140.117.139:4001/css/table.css"> -->
+    <link rel="stylesheet" href="http://103.178.37.3:4001/css/navbar.css">
+    <link rel="stylesheet" href="http://103.178.37.3:4001/css/style.css">
+    <!-- for daterangepicker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script>
+      const countryList = <%- JSON.stringify(countryList) %>;
+
+      function updateSecondSelect(){
+          const country = document.getElementById("country");
+          const region = document.getElementById("region");
+          console.log(countryList[0].region);
+          console.log(region.value);
+          
+          country.innerHTML = "<option value=''>Select an option</option>"
+          if(region.value == -1){
+            
+            for(let i=0 ; i<countryList.length ; i++){
+              const option = document.createElement("option");
+              option.value = countryList[i].countryName;
+              option.text = countryList[i].countryName;
+              country.appendChild(option);
+            }
+          }else{
+            for(let i=0 ; i<countryList.length ; i++){
+              if(countryList[i].region == region.value){
+                const option = document.createElement("option");
+                option.value = countryList[i].countryName;
+                option.text = countryList[i].countryName;
+                country.appendChild(option);
+              }
+            }
+          }
+
+        }
+    </script>
+</head>
+
+<body>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style = 'z-index: 10000;'>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" id="recipient-name">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <%- include navbar.ejs %>
+    <input type ="checkbox" id="right-text-switch">
+    <div class="right-text-container">
+      <!-- selection for VOCOM & customer -->
+      <% if(accountLevel <= 1 || accountLevel == 3) { %>
+        <div class="right-text">
+          <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
+          <form name="idcInfo" method="post" action="/idcwebsite/idcInfo" id ="select-form">
+            <select name="powerPrice_KW_Hour" id="powerPrice_KW_Hour" style = "width: 15%;">
+              <option value="999999">All pricePerKWH</option>
+              <option value="0.1"> <0.1 </option>
+              <option value="0.2"> <0.2 </option>
+              <option value="0.3"> <0.3 </option>
+            </select>
+            <select name="powerPrice_KW_Month" id="powerPrice_KW_Month" style = "width: 15%;">
+              <option value="999999">All pricePerKWMonth</option>
+              <option value="100"> <100 </option>
+              <option value="150"> <150 </option>
+              <option value="200"> <200 </option>
+            </select>
+            <select name="powerAvail_MW" id="powerAvail_MW" style = "width: 15%;">
+              <option value="0">All Avail Power (MW)</option>
+              <option value="1000"> >1 </option>
+              <option value="3000"> >3 </option>
+              <option value="6000"> >6 </option>
+            </select>
+            <select name="rackAvail" id="rackAvail" style = "width: 15%;">
+              <option value="0">All Avail Racks</option>
+              <option value="500"> >500 </option>
+              <option value="1000"> >1000 </option>
+            </select>
+            <select name="region" id="region" style = "width: 10%;" onchange="updateSecondSelect()">
+              <option value="-1">All region</option>  
+              <% for (let i=0; i<RegionList.length ;i++) {%>
+                <option value="<%=RegionList[i].region%>"><%=RegionList[i].region%></option>
+              <%}%>
+            </select>
+            <select  name="country" id="country" style = "width: 10%;">
+              <option value="-1">All country</option>
+              <% for (let i=0; i<countryList.length ;i++) {%>
+                <option value="<%=countryList[i].countryName%>"><%=countryList[i].countryName%></option>
+              <%}%>
+            </select>
+            
+            <button class="btn btn-secondary my-2 my-sm-0 " type="submit" >Search<i class="fa fa-search" aria-hidden="true"></i></button>
+          </form>
+          <br>
+        </div>
+      <% } %>
+      <!-- IDC information here -->
+      <div class="right-text">
+        <% if (flag) { %>
+          <h2 style="font-weight: bold; color: #4B363C;">IDC Information</h2>
+            <table
+              data-toggle="table"
+              data-sortable="true"
+              data-sort-class="table-active"
+              data-pagination="true"
+              data-page-size="10"
+              data-search="true"
+              data-show-refresh="true"
+              data-show-toggle="true"
+              data-show-columns="true"
+              data-show-columns-toggle-all="true"         
+            >
+            <thead class='bthead' >
+                <tr>
+                    <th data-field="dataCenterId" data-sortable="true">ID</th>
+                    <th data-field="region" data-sortable="true">Region</th>
+                    <th data-field="powerAvail_MW" data-sortable="true">Avail Power (MW)</th>
+                    <th data-field="powerPrice_KW_Hour" data-sortable="true"> Price per KWH</th>
+                    <th data-field="powerPrice_KW_Month" data-sortable="true"> Price per KWM</th>
+                    <th data-field="rackAvail" data-sortable="true">Avail Racks</th>
+                    <th data-field="lastModifiedAt" data-sortable="true">Last Modified</th>
+                    <th data-field="detailInfo" data-sortable="true">Detail Info</th>
+                </tr>
+            </thead>
+                <tbody>
+                    <% for(let i = 0 ; i<idc_info.length ; i++){ %>
+                    <tr>
+                        <td><%= idc_info[i].dataCenterId %> </td>
+                        <td><%= idc_info[i].region %> </td>
+                        <td><%= idc_info[i].powerAvail_MW %> </td>
+                        <td><%= idc_info[i].powerPrice_KW_Hour %></td>
+                        <td><%= idc_info[i].powerPrice_KW_Month %></td>
+                        <td><%= idc_info[i].rackAvail %></td>
+                        <td><%= idc_info[i].lastModifiedAt %></td>
+                        <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="<%= idc_info[i].dataCenterId %>">Detail Information</button></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        <% } else { %>
+          <h2 style="font-weight: bold; color: #4B363C;">IDC Information</h2>
+          <h3 style="font-weight: bold; color: #ff0000;">No IDC Information meet your requirement.</h3>
+        <% } %>
+        
+      </div>
+      <div class="spacer"></div>
+    </div>
+  </div>  
+</body>
+
+</html>
+
+<script>
+  $('#exampleModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.data('whatever') // Extract info from data-* attributes
+      const idcInformation = <%- JSON.stringify(idc_info) %>;
+      let keyMap = new Map([
+        ['dataCenterId','ID'],
+        ['country','Country'],
+        ['certificationTier','CertificationTier'],
+        ['certificationISO','ISO Certification'],
+        ['powerTotal_MW','Total Power (MW)'],
+        ['powerAvail_MW','Avail Power (MW)'],
+        ['powerDualSupply','Dual Power Supply'],
+        ['nPlusOneBackUp','+1 Backup'],
+        ['fuelTankCap_Liters','Fuel Tank Capacity (Liters)'],
+        ['fuelTankCap_hour','Fuel Tank Capacity (Hours)'],
+        ['upsOutageSustain_min','UPS (Mins)'],
+        ['fiberDualEntry','Dual Fiber Entry'],
+        ['potentExpan','Expansion'],
+        ['potentExpanDate','Expansion Date'],
+        ['potentExpanPower_MW','Expansion Power (MW)'],
+        ['powerPrice_KW_Hour','Power Price (USD/KWH)'],
+        ['powerPrice_KW_Month','Power Price (USD/KWMonth)'],
+        ['spacePrice_KW','Space Price (USD/KW)'],
+        ['rackMRC','Rack Price (USD/Month)'],
+        ['priceMRC','priceMRC'],
+        ['pricePerKWh','Price per KWh'],
+        ['rackMax_KW_LC','Max Power per Rack(LC/KW)'],
+        ['rackMax_KW_AC','Max Power per Rack(AC/KW)'],
+        ['PUE','PUE'],
+        ['rackTotal','Total Racks'],
+        ['rackAvail','Avail Racks'],
+        ['liquidCoolingReady','Liquid Cooling'],
+        ['liquidCoolingReadyDate','Liquid Cooling Ready Date'],
+        ['minContractTerm','Min Contract Term'],
+        ['reservationRequirement','Reservation Requirement'],
+        ['notes','Notes'],
+        ['vocomContactName','Vocom Contact'],
+        ['vocomContactEmail','Vocom Email'],
+        ['createdAt','Created on'],
+        ['lastModifiedAt','Last Modified'],
+      ])
+      let output = "<ul>";
+      for(let i = 0 ; i<idcInformation.length ; i++){
+        
+          if(idcInformation[i].dataCenterId == recipient){
+              for (const [key, value] of Object.entries(idcInformation[i])) {
+                let mappedKey = keyMap.get(key) || key;
+                if(mappedKey == 'Reservation Requirement'){
+                  output += '<li><strong style="display:inline-block; min-width:220px;">' + mappedKey + ":</strong> " + value +' months'+ "</li>";
+                }else{
+                  output += '<li><strong style="display:inline-block; min-width:220px;">' + mappedKey + ":</strong> " + value + "</li>";
+                }
+                
+              }
+              output += '<li><strong style="display:inline-block; min-width:220px;">' + 'VOCOM Contact' + ":</strong> " + 'Ben Chen' + "</li>";
+              output += '<li><strong style="display:inline-block; min-width:220px;">' + 'Vocom Email' + ":</strong> " + 'ben.chen@vocom.com' + "</li>";
+            break;
+          }
+      }
+      output += "</ul>";
+      var modal = $(this)
+      modal.find('.modal-title').text(recipient + ' IDC information')
+      modal.find('.modal-body').html(output)
+  })
+</script>

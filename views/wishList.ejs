@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+    <title>IDC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="http://103.178.37.3:4001/css/navbar.css">
+    <link rel="stylesheet" href="http://103.178.37.3:4001/css/style.css">
+    <link rel="stylesheet" href="http://103.178.37.3:4001/css/dropdown.css">
+   
+
+
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+
+
+</head>
+
+<body>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style = 'z-index: 10000;'>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" id="recipient-name">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <%- include navbar.ejs %>
+    <% if ( flag == 1) { %>
+      <script type="text/javascript">
+        showAlert = function() {
+          alert(`You request had been sent to VOCOM sales team!`);
+        }
+        showAlert();
+      </script>
+    <% } %>
+    <% if ( flag == -1) { %>
+      <script type="text/javascript">
+        showAlert = function() {
+          alert(`Special characters and words is not allowed!(!@#$%^&*+{}:&gt&lt?; delete insert update .etc)\r\nThe limit for "notes" or "location" is 500 characters. \r\n Please send it again!`);
+        }
+        showAlert();
+      </script>
+    <% } %>
+    <% if ( flag == -2) { %>
+      <script type="text/javascript">
+        showAlert = function() {
+          alert(`At least "Avail Power" should be fill in!\r\n Please send it again!`);
+        }
+        showAlert();
+      </script>
+    <% } %>
+    <input type ="checkbox" id="right-text-switch">
+    <div class="right-text-container">
+      <!-- IDC information here -->
+      <div class="right-text">
+        <h2 style="font-weight: bold; color: #4B363C;">IDC Request Form</h2>
+        <h5 style="font-weight: bold; color: #ff0000;">If you have identified a matching IDC or a new IDC requirement, please fill out the form and we will contact you.</h5>
+        <!-- table 用 form包起來做做看 -->
+        <form name="modifyIdcInfo" method="post" action="/idcwebsite/wishList" id="select-form" onsubmit="return confirm('Do you really want to submit the form?');">
+          <table
+            data-toggle="table"
+            data-sortable="true"
+            data-sort-class="table-active"
+          >
+          <thead class='bthead' >
+              <tr>
+                  <th data-field="column" data-sortable="true">Column</th>
+                  <th data-field="modifyData" data-sortable="true">Information</th>
+                  <th data-field="remark" data-sortable="true">Remark</th>
+              </tr>
+          </thead>
+              <tbody>
+                  <tr>
+                    <td>Requested Location</td>
+                    <td><input type="text" placeholder="Location" name="location_wishList" style = "width: 100%; text-align:center"></td>
+                    <td>Country or City</td>
+                  </tr>
+                  <tr>
+                    <td>Required Power</td>
+                    <td><input type="number" step="0.1" min="0" placeholder="Avail Power" name="powerAvail_MW_wishList" style = "width: 100%; text-align:center" required="required"></td>
+                    <td>Megawatt</td>
+                  </tr>
+                  <tr>
+                    <td>Target Power Price</td>
+                    <td><input type="number" step="0.01" min="0" placeholder="Power Price" name="powerPrice_KW_Hour_wishList" style = "width: 100%; text-align:center"></td>
+                    <td>USD/Kilowatt</td>
+                  </tr>
+                  <tr>
+                    <td>Target Space Price</td>
+                    <td><input type="number" step="10" min="0" placeholder="Space Price" name="spacePrice_KW_wishList" style = "width: 100%; text-align:center"></td>
+                    <td>USD/Kilowatt</td>
+                  </tr>
+                  <tr>
+                    <td>Max Power per Rack</td>
+                    <td><input type="number" step="1" min="0" placeholder="Max Power per Rack" name="rackMax_KW_wishList" style = "width: 100%; text-align:center"></td>
+                    <td>Kilowatt</td>
+                  </tr>
+                  <tr>
+                    <td>Liquid Cooling</td>
+                    <td><select name="liquidCoolingReady_wishList" id="liquidCoolingReady_wishList" style = "width: 100%; text-align:center">
+                        <option value='0'> No requirement</option>
+                        <option value='1'> Yes</option>
+                        <option value='-1'> No</option>
+                    </select></td>
+                    <td>Ready or not</td>
+                  </tr>
+                  <tr>
+                    <td>Deployment Date</td>
+                    <td><select name="deploymentDate_wishList" id="deploymentDate_wishList" style = "width: 100%; text-align:center">
+                        <option value='No requirement'> No requirement</option>
+                        <%for (let i=0;i<dateList.length ; i++) { %>
+                          <option value="<%=dateList[i]%>"><%=dateList[i]%></option>
+                        <% } %> 
+                      </select></td>
+                    <td>Year/Quarter</td>
+                  </tr>
+                  <tr>
+                    <td>Remark</td>
+                    <td><input type="text" placeholder="Remark" name="remark_wishList" style = "width: 100%; text-align:center"></td>
+                    <td>Special requirement</td>
+                  </tr>
+              </tbody>
+          </table>
+          </br>
+          <div style="text-align: right; padding: 10px 0;">
+            <button class="btn btn-secondary my-2 my-sm-0 " type="submit" style ="background-color: rgb(114, 114, 255); margin-right: 20px;">Submit</button>
+          </div>
+        </form>
+      </div>
+      <div class="spacer"></div>
+    </div>
+  </div> 
+  
+</body>
+
+</html>
+
+
+
+

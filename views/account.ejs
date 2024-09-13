@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page with Background Image Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <link rel="stylesheet" href="http://18.140.117.139:4001/css/table.css"> -->
+    <link rel="stylesheet" href="http://103.178.37.3:4001/css/navbar.css">
+    <link rel="stylesheet" href="http://103.178.37.3:4001/css/style.css">
+    <!-- for daterangepicker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    
+</head>
+
+
+<body>
+  <div>
+    <%- include navbar.ejs %>
+  </div>
+  <input type ="checkbox" name="" id="right-text-switch">
+  <div class="right-text-container">
+    <div class="right-text"> 
+      <h2 style="font-weight: bold; color: #4B363C;">Account management</h2>
+      <form name="account_update" method="post" action="/idcwebsite/account">
+        <div class="account-para">
+            <input type="text" value="<%= account%>" id="account" disabled="disabled">
+            
+        </div>
+        <div class="account-para">
+            <input type="password" id="oldPassword" placeholder="Original password" name="account_oldPassword" required oninvalid="this.setCustomValidity('Original password should be filled')" oninput="this.setCustomValidity('')">
+            <img src="http://103.178.37.3:4001/img/eye-slash.png" id="oldPasswordeyeicon">
+        </div>
+        <div class="account-para">
+            <input type="password" id="newPassword" placeholder="New password" name="account_newPassword" required oninvalid="this.setCustomValidity('New password should be filled')" oninput="this.setCustomValidity('')">
+            <img src="http://103.178.37.3:4001/img/eye-slash.png" id="newPasswordeyeicon">
+        </div>
+        <div class="account-para">
+            <input type="password" id="confirmPassword" placeholder="Confirm new password" name="account_confirmPassword" required oninvalid="this.setCustomValidity('Confirm new password should be filled')" oninput="this.setCustomValidity('')">
+            <img src="http://103.178.37.3:4001/img/eye-slash.png" id="confirmPasswordeyeicon">
+        </div>
+        <div class="account-submit">
+            <button class="btn btn-secondary my-2 my-sm-0 " type="submit" onclick="change()">Confirm</button>
+        </div>
+    </form>
+
+    <% if (account_changePasswordResult == 1) { %>
+        <div class="account-error">
+            <i class="fa fa-times" aria-hidden="true"></i>
+            Change password failed. Password should not include "!@#$%^&*()+{}:><?,./;".
+        </div>
+    <% } else if (account_changePasswordResult == 2) { %>
+        <div class="account-error">
+            <i class="fa fa-times" aria-hidden="true"></i>
+            Change password failed. The original password is not correct.
+        </div>
+    <% } else if (account_changePasswordResult == 3) { %>
+        <div class="account-error">
+            <i class="fa fa-times" aria-hidden="true"></i>
+            Change password failed. The new password should not be the same as original password.
+        </div>
+    <% } else if (account_changePasswordResult == 4){ %>
+        <div class="account-error">
+            <i class="fa fa-times" aria-hidden="true"></i>
+            Change password failed. The confirm password is not the same as the new password.
+        </div>
+    <% } %>
+
+    </div>
+    
+      <div class="spacer"></div>
+  </div>
+  <script>
+    let oldPasswordeyeicon = document.getElementById("oldPasswordeyeicon")
+    let oldPassword = document.getElementById("oldPassword");
+
+    oldPasswordeyeicon.onclick = function(){
+        if(oldPassword.type == "password"){
+            oldPassword.type = "text";
+            oldPasswordeyeicon.src = "http://103.178.37.3:4001/img/eye-open.png"
+        }else{
+            oldPassword.type = "password"
+            oldPasswordeyeicon.src = "http://103.178.37.3:4001/img/eye-slash.png"
+        }
+    }
+
+    let newPasswordeyeicon = document.getElementById("newPasswordeyeicon")
+    let newPassword = document.getElementById("newPassword");
+
+    newPasswordeyeicon.onclick = function(){
+        if(newPassword.type == "password"){
+            newPassword.type = "text";
+            newPasswordeyeicon.src = "http://103.178.37.3:4001/img/eye-open.png"
+        }else{
+            newPassword.type = "password"
+            newPasswordeyeicon.src = "http://103.178.37.3:4001/img/eye-slash.png"
+        }
+    }
+
+    let confirmPasswordeyeicon = document.getElementById("confirmPasswordeyeicon")
+    let confirmPassword = document.getElementById("confirmPassword");
+
+    confirmPasswordeyeicon.onclick = function(){
+        if(confirmPassword.type == "password"){
+            confirmPassword.type = "text";
+            confirmPasswordeyeicon.src = "http://103.178.37.3:4001/img/eye-open.png"
+        }else{
+            confirmPassword.type = "password"
+            confirmPasswordeyeicon.src = "http://103.178.37.3:4001/img/eye-slash.png"
+        }
+    }
+
+    function change(){
+        if( alert("If the password change excuted successfully, this portal will send you to the login page. Please login with new password again.")){
+        } 
+    }
+
+</script>
+</body>
+</html>
