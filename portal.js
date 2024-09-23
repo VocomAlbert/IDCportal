@@ -8,8 +8,6 @@ let engine = require('ejs-locals');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var alert = require('alert');
-const PATH = require('path');
-require('dotenv').config({ path: PATH.resolve(__dirname, './.env') });
 var app = express();
 const FS = require('fs');
 const { resourceLimits } = require('worker_threads');
@@ -43,6 +41,7 @@ app.get('/idcwebsite', async function (req, res) {
   res.clearCookie("powerPrice_KW_Hour");
   res.clearCookie("powerPrice_KW_Month");
   res.clearCookie("powerAvail_MW");
+  res.clearCookie("price_AllIn");
   res.clearCookie("rackAvail");
   res.clearCookie("region");
   res.clearCookie("country");
@@ -58,6 +57,7 @@ app.get('/idcwebsite', async function (req, res) {
   res.clearCookie("powerPrice_KW_Hour_modify");
   res.clearCookie("powerPrice_KW_Month_modify");
   res.clearCookie("spacePrice_KW_modify");
+  res.clearCookie("price_AllIn_modify");
   res.clearCookie("rackMRC_modify");
   res.clearCookie("priceMRC_modify");
   res.clearCookie("pricePerKWh_modify");
@@ -79,6 +79,10 @@ app.get('/idcwebsite', async function (req, res) {
   res.clearCookie("reservationRequirement_modify");
   res.clearCookie("notes_modify");
   res.clearCookie("changeApproval");
+  res.clearCookie("dataCenterOner");
+  res.clearCookie("vocomContactName");
+  res.clearCookie("remark");
+  res.clearCookie("approval");
 
   //wishList
   res.clearCookie("location_wishList");
@@ -175,13 +179,14 @@ app.get('/idcwebsite/idcInfo', async function (req, res) {
     res.locals.accountLevel = req.cookies.accountLevel ? req.cookies.accountLevel : 3;
     res.locals.powerPrice_KW_Hour = req.cookies.powerPrice_KW_Hour ? req.cookies.powerPrice_KW_Hour : 999999;
     res.locals.powerPrice_KW_Month = req.cookies.powerPrice_KW_Month ? req.cookies.powerPrice_KW_Month : 999999;
+    res.locals.price_AllIn = req.cookies.price_AllIn ? req.cookies.price_AllIn : 999999;
     res.locals.powerAvail_MW = req.cookies.powerAvail_MW ? req.cookies.powerAvail_MW : 0;
     res.locals.rackAvail = req.cookies.rackAvail ? req.cookies.rackAvail : 0;
     res.locals.region = req.cookies.region ? req.cookies.region : -1;
     res.locals.country = req.cookies.country ? req.cookies.country : -1;
     res.locals.flag = 1;
     //res.locals.pricePerRack = 
-    let idc_info = await idcFunction.getIdc_Info(res.locals.powerPrice_KW_Hour, res.locals.powerPrice_KW_Month, res.locals.powerAvail_MW, res.locals.rackAvail, res.locals.region, res.locals.country);
+    let idc_info = await idcFunction.getIdc_Info(res.locals.powerPrice_KW_Hour, res.locals.powerPrice_KW_Month, res.locals.price_AllIn, res.locals.powerAvail_MW, res.locals.rackAvail, res.locals.region, res.locals.country);
     res.locals.idc_info = idc_info;
  
     
@@ -224,6 +229,12 @@ app.post('/idcwebsite/idcInfo', async function (req, res) {
       res.cookie('powerAvail_MW', req.body.powerAvail_MW);
     }else{
       res.clearCookie("powerAvail_MW");
+    }
+
+    if (req.body.price_AllIn) {
+      res.cookie('price_AllIn', req.body.price_AllIn);
+    }else{
+      res.clearCookie("price_AllIn");
     }
 
     if (req.body.rackAvail){
@@ -363,7 +374,11 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     res.locals.error = 0;
     //filter
     res.locals.dataCenterId = req.cookies.dataCenterId ? req.cookies.dataCenterId : 0;
-
+    //filter for idcList
+    res.locals.dataCenterOner = req.cookies.dataCenterOner ? req.cookies.dataCenterOner : 0;
+    res.locals.vocomContactName = req.cookies.vocomContactName ? req.cookies.vocomContactName : 0;
+    res.locals.remark = req.cookies.remark ? req.cookies.remark : 0;
+    res.locals.approval = req.cookies.approval ? req.cookies.approval : 0;
     //modify data
     //multiple selection
     res.locals.certificationTier_modify = req.cookies.certificationTier_modify ? req.cookies.certificationTier_modify : -1;
@@ -378,6 +393,7 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     res.locals.powerPrice_KW_Hour_modify = req.cookies.powerPrice_KW_Hour_modify ? req.cookies.powerPrice_KW_Hour_modify : -1;
     res.locals.powerPrice_KW_Month_modify = req.cookies.powerPrice_KW_Month_modify ? req.cookies.powerPrice_KW_Month_modify : -1;
     res.locals.spacePrice_KW_modify = req.cookies.spacePrice_KW_modify ? req.cookies.spacePrice_KW_modify : -1;
+    res.locals.price_AllIn_modify = req.cookies.price_AllIn_modify ? req.cookies.price_AllIn_modify : -1;
     res.locals.rackMRC_modify = req.cookies.rackMRC_modify ? req.cookies.rackMRC_modify : -1;
     res.locals.priceMRC_modify = req.cookies.priceMRC_modify ? req.cookies.priceMRC_modify : -1;
     res.locals.pricePerKWh_modify = req.cookies.pricePerKWh_modify ? req.cookies.pricePerKWh_modify : -1;
@@ -408,18 +424,31 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     }
 
     res.locals.idcList;
-    let idcList = await idcFunction.getIdcList(res.locals.account, res.locals.accountLevel);
-    let certificationTierList = await idcFunction.getCertificationTier();
-    let certificationISOList = await idcFunction.getCertificationISO();
-    let dateList = await idcFunction.getDateList();
+    let idcList = await idcFunction.getIdcList(res.locals.account, res.locals.accountLevel, res.locals.dataCenterOner, res.locals.vocomContactName, res.locals.remark, res.locals.approval);
     res.locals.idcList = idcList;
-    res.locals.certificationTierList = certificationTierList;
-    res.locals.certificationISOList = certificationISOList;
-    res.locals.dateList = dateList;
 
+    let certificationTierList = await idcFunction.getCertificationTier();
+    res.locals.certificationTierList = certificationTierList;
+
+    let certificationISOList = await idcFunction.getCertificationISO();
+    res.locals.certificationISOList = certificationISOList;
+
+    let dateList = await idcFunction.getDateList();
+    res.locals.dateList = dateList;
     
+    let idcPartnerList = await idcFunction.getIdcPartnerList(res.locals.account, res.locals.accountLevel);
+    res.locals.idcPartnerList = idcPartnerList
+    let idcManagerList = await idcFunction.getIdcManagerList();
+    res.locals.idcManagerList = idcManagerList
+
+    //應急處理 之後要改
     if(!res.locals.dataCenterId){
-      res.locals.dataCenterId = idcList[0].dataCenterId
+      if(idcList.length){
+        res.locals.dataCenterId = idcList[0].dataCenterId
+      }else{
+        res.locals.dataCenterId = 'Minnesota1'
+      }
+      
     }
     
     let idcinfoupdate = await idcFunction.updateIDCinfo(
@@ -434,6 +463,7 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.locals.powerPrice_KW_Hour_modify,
       res.locals.powerPrice_KW_Month_modify,
       res.locals.spacePrice_KW_modify,
+      res.locals.price_AllIn_modify,
       res.locals.rackMRC_modify,
       res.locals.priceMRC_modify,
       res.locals.pricePerKWh_modify,
@@ -476,6 +506,7 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.clearCookie("powerPrice_KW_Hour_modify");
       res.clearCookie("powerPrice_KW_Month_modify");
       res.clearCookie("spacePrice_KW_modify");
+      res.clearCookie("price_AllIn_modify");
       res.clearCookie("rackMRC_modify");
       res.clearCookie("priceMRC_modify");
       res.clearCookie("pricePerKWh_modify");
@@ -505,7 +536,38 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
 app.post('/idcwebsite/modifyIdcInfo', async function (req, res) {
   //check user login informaion, if not login send back to login page
   if (req.cookies.account) {
-    //get parameter from post, write into cookie
+    //idc filter
+    if (req.body.dataCenterOner) {
+      res.cookie('dataCenterOner', req.body.dataCenterOner);
+    }else{
+      res.clearCookie("dataCenterOner");
+    }
+
+    if (req.body.vocomContactName) {
+      res.cookie('vocomContactName', req.body.vocomContactName);
+    }else{
+      res.clearCookie("vocomContactName");
+    }
+
+    if (req.body.remark) {
+      res.cookie('remark', req.body.remark);
+    }else{
+      res.clearCookie("remark");
+    }
+
+    if (req.body.approval) {
+      res.cookie('approval', req.body.approval);
+    }else{
+      res.clearCookie("approval");
+    }
+
+    if (req.body.changeApproval) {
+      res.cookie('changeApproval', req.body.changeApproval);
+    }else{
+      res.clearCookie("changeApproval");
+    }
+
+    //get parameter from post, write into cookie, modify idc infromation
     if (req.body.dataCenterId) {
       res.cookie('dataCenterId', req.body.dataCenterId);
     }
@@ -599,6 +661,12 @@ app.post('/idcwebsite/modifyIdcInfo', async function (req, res) {
     }else{
       res.clearCookie("powerPrice_KW_Month_modify");
     }
+
+    if (req.body.price_AllIn_modify) {
+      res.cookie('price_AllIn_modify', req.body.price_AllIn_modify);
+    }else{
+      res.clearCookie("price_AllIn_modify");
+    }
     
     if (req.body.spacePrice_KW_modify) {
       res.cookie('spacePrice_KW_modify', req.body.spacePrice_KW_modify);
@@ -682,12 +750,6 @@ app.post('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.cookie('notes_modify', req.body.notes_modify);
     }else{
       res.clearCookie("notes_modify");
-    }
-
-    if (req.body.changeApproval) {
-      res.cookie('changeApproval', req.body.changeApproval);
-    }else{
-      res.clearCookie("changeApproval");
     }
     
     res.redirect('/idcwebsite/modifyIdcInfo');

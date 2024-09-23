@@ -104,6 +104,33 @@
         </script>
       <% } %>
       <div class="right-text">
+        <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
+        <form name="idcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id ="select-form">
+          <select name="dataCenterOner" id="dataCenterOner" style = "width: 20%;">
+            <option value='0'> Partner</option>
+            <% for ( let i=0 ; i<idcPartnerList.length ; i++ ) { %>
+              <option value="<%=idcPartnerList[i].dataCenterOner%>"> <%=idcPartnerList[i].dataCenterOner%></option>
+            <% } %>
+          </select>
+          <select name="vocomContactName" id="vocomContactName" style = "width: 20%;">
+            <option value='0'> Manager</option>
+            <% for ( let i=0 ; i<idcManagerList.length ; i++ ) { %>
+              <option value="<%=idcManagerList[i].vocomContactName%>"> <%=idcManagerList[i].vocomContactName%></option>
+            <% } %>
+          </select>
+          <select name="remark" id="remark" style = "width: 20%;">
+            <option value='0'> Remark</option>
+            <option value='Modified'> Modified</option>
+            <option value='Need modified'> Need modified	</option>
+          </select>
+          <select name="approval" id="approval" style = "width: 20%;">
+            <option value='0'> Approval Status</option>
+            <option value='-1'> Not approved</option>
+            <option value='1'> Approved</option>
+            <option value='2'> Rejected</option>
+          </select>
+          <button class="btn btn-secondary my-2 my-sm-0 " type="submit" >Search <i class="fa fa-search" aria-hidden="true"></i></button>
+        </form>
         <table
           data-toggle="table"
           data-sortable="true"
@@ -124,7 +151,8 @@
               <th data-field="Approval" data-sortable="true">Approval</th>
               <th data-field="Detail" data-sortable="true">Detail</th>
               <%if (accountLevel == 0) { %>
-              <th data-field="Change Approval" data-sortable="true">Change Approval</th>
+              <th data-field="Approve" data-sortable="true">Approve</th>
+              <th data-field="Reject" data-sortable="true">Reject</th>
               <% } %>
               <th data-field="Last Modified" data-sortable="true">Last Modified</th>
           </tr>
@@ -137,14 +165,20 @@
                 <td><%= idcList[i].dataCenterName%></td>
                 <td><%= idcList[i].vocomContactName%></td>
                 <td><%= idcList[i].remark%></td>
-                <td><%= idcList[i].approval%></td>
+                <td><%= idcList[i].approvalStatus%></td>
                 <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#idcDetail" data-whatever="<%= idcList[i].dataCenterId %>">Detail</button></td>
                 <%if (accountLevel == 0) { %>
                 <td><form action="/idcwebsite/modifyIdcInfo" method="post">
                   <!-- <button type="submit" name="EM_esimStatus_refresh" value="1" class="fill">Refresh</button> -->
-                  <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="changeApproval" value="<%= idcList[i].dataCenterId%>" >ChangeApproval</button>
+                  <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="changeApproval" value="<%= idcList[i].dataCenterId%> 1" >Approve</button>
                 </form></td>
                 <% } %>
+                <%if (accountLevel == 0) { %>
+                  <td><form action="/idcwebsite/modifyIdcInfo" method="post">
+                    <!-- <button type="submit" name="EM_esimStatus_refresh" value="1" class="fill">Refresh</button> -->
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="changeApproval" value="<%= idcList[i].dataCenterId%> 2" style="background-color: red;">Reject</button>
+                  </form></td>
+                  <% } %>
                 <td><%= idcList[i].lastModifiedAt%></td>
               </tr>
               <% } %>
@@ -364,7 +398,7 @@
                       <td>Power Price (KWH)</td>
                       <td><%= idcDetail[0].powerPrice_KW_Hour%></td>
                       <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="powerPrice_KW_Hour" name="powerPrice_KW_Hour_modify" style = "width: 100%; text-align:center"></td>
+                      <td><input type="number" step="0.001" min="0" placeholder="powerPrice_KW_Hour" name="powerPrice_KW_Hour_modify" style = "width: 100%; text-align:center"></td>
                       <% } %>
                       <td>USD/KWH</td>
                     </tr>
@@ -372,9 +406,17 @@
                       <td>Power Price (KWMonth)</td>
                       <td><%= idcDetail[0].powerPrice_KW_Month%></td>
                       <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="powerPrice_KW_Month" name="powerPrice_KW_Month_modify" style = "width: 100%; text-align:center"></td>
+                      <td><input type="number" step="0.001" min="0" placeholder="powerPrice_KW_Month" name="powerPrice_KW_Month_modify" style = "width: 100%; text-align:center"></td>
                       <% } %>
                       <td>USD/KWMonth</td>
+                    </tr>
+                    <tr>
+                      <td>Price All In</td>
+                      <td><%= idcDetail[0].price_AllIn %></td>
+                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
+                      <td><input type="number" step="0.001" min="0" placeholder="price_AllIn" name="price_AllIn_modify" style = "width: 100%; text-align:center"></td>
+                      <% } %>
+                      <td>USD/KWH/Space</td>
                     </tr>
                     <tr>
                       <td>Space Price</td>
@@ -672,8 +714,6 @@ $jq(document).ready(function() {
                 }
                 
               }
-              output += '<li><strong style="display:inline-block; min-width:220px;">' + 'VOCOM Contact' + ":</strong> " + 'Ben Chen' + "</li>";
-              output += '<li><strong style="display:inline-block; min-width:220px;">' + 'Vocom Email' + ":</strong> " + 'ben.chen@vocom.com' + "</li>";
             break;
           }
       }

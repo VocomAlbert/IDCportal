@@ -91,36 +91,43 @@
         <div class="right-text">
           <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
           <form name="idcInfo" method="post" action="/idcwebsite/idcInfo" id ="select-form">
-            <select name="powerPrice_KW_Hour" id="powerPrice_KW_Hour" style = "width: 15%;">
-              <option value="999999">All pricePerKWH</option>
-              <option value="0.1"> <0.1 </option>
-              <option value="0.2"> <0.2 </option>
-              <option value="0.3"> <0.3 </option>
-            </select>
-            <select name="powerPrice_KW_Month" id="powerPrice_KW_Month" style = "width: 15%;">
-              <option value="999999">All pricePerKWMonth</option>
-              <option value="100"> <100 </option>
-              <option value="150"> <150 </option>
-              <option value="200"> <200 </option>
-            </select>
-            <select name="powerAvail_MW" id="powerAvail_MW" style = "width: 15%;">
+            <select name="powerAvail_MW" id="powerAvail_MW" style = "width: 20%;">
               <option value="0">All Avail Power (MW)</option>
               <option value="1000"> >1 </option>
               <option value="3000"> >3 </option>
               <option value="6000"> >6 </option>
             </select>
-            <select name="rackAvail" id="rackAvail" style = "width: 15%;">
+            <select name="powerPrice_KW_Hour" id="powerPrice_KW_Hour" style = "width: 20%;">
+              <option value="999999">All Price Per KWH</option>
+              <option value="0.1"> <0.1 </option>
+              <option value="0.2"> <0.2 </option>
+              <option value="0.3"> <0.3 </option>
+            </select>
+            <select name="powerPrice_KW_Month" id="powerPrice_KW_Month" style = "width: 20%;">
+              <option value="999999">All Price Per KWMonth</option>
+              <option value="100"> <100 </option>
+              <option value="150"> <150 </option>
+              <option value="200"> <200 </option>
+            </select>
+            <select name="price_AllIn" id="price_AllIn" style = "width: 20%;">
+              <option value="999999">All Price_AllIn </option>
+              <option value="100"> <100 </option>
+              <option value="150"> <150 </option>
+              <option value="200"> <200 </option>
+            </select>
+            <br><br>
+            <select name="rackAvail" id="rackAvail" style = "width: 20%;">
               <option value="0">All Avail Racks</option>
               <option value="500"> >500 </option>
               <option value="1000"> >1000 </option>
             </select>
-            <select name="region" id="region" style = "width: 10%;" onchange="updateSecondSelect()">
+            <select name="region" id="region" style = "width: 20%;" onchange="updateSecondSelect()">
               <option value="-1">All region</option>  
               <% for (let i=0; i<RegionList.length ;i++) {%>
                 <option value="<%=RegionList[i].region%>"><%=RegionList[i].region%></option>
               <%}%>
             </select>
-            <select  name="country" id="country" style = "width: 10%;">
+            <select  name="country" id="country" style = "width: 20%;">
               <option value="-1">All country</option>
               <% for (let i=0; i<countryList.length ;i++) {%>
                 <option value="<%=countryList[i].countryName%>"><%=countryList[i].countryName%></option>
@@ -155,6 +162,7 @@
                     <th data-field="powerAvail_MW" data-sortable="true">Avail Power (MW)</th>
                     <th data-field="powerPrice_KW_Hour" data-sortable="true"> Price per KWH</th>
                     <th data-field="powerPrice_KW_Month" data-sortable="true"> Price per KWM</th>
+                    <th data-field="price_AllIn" data-sortable="true"> Price All In</th>
                     <th data-field="rackAvail" data-sortable="true">Avail Racks</th>
                     <th data-field="lastModifiedAt" data-sortable="true">Last Modified</th>
                     <th data-field="detailInfo" data-sortable="true">Detail Info</th>
@@ -168,6 +176,7 @@
                         <td><%= idc_info[i].powerAvail_MW %> </td>
                         <td><%= idc_info[i].powerPrice_KW_Hour %></td>
                         <td><%= idc_info[i].powerPrice_KW_Month %></td>
+                        <td><%= idc_info[i].price_AllIn %></td>
                         <td><%= idc_info[i].rackAvail %></td>
                         <td><%= idc_info[i].lastModifiedAt %></td>
                         <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="<%= idc_info[i].dataCenterId %>">Detail Information</button></td>

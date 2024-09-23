@@ -5,14 +5,14 @@ const excel = require('exceljs');
 const wb = new excel.Workbook();
 const FS = require('fs');
 
-module.exports.getIdc_Info = async function (powerPrice_KW_Hour, powerPrice_KW_Month, powerAvail_MW, rackAvail, region, country) {
+module.exports.getIdc_Info = async function (powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, powerAvail_MW, rackAvail, region, country) {
     let data;
     if (country != -1) {
-        data = await Query("select * from idc_info where (powerPrice_KW_Hour < ? or powerPrice_KW_Hour = 0) and (powerPrice_KW_Month < ? or powerPrice_KW_Month = 0) and powerAvail_MW > ? and (rackAvail > ? or rackAvail = 0) and approval = 1 and country = ?", [powerPrice_KW_Hour, powerPrice_KW_Month, powerAvail_MW, rackAvail, country]);
+        data = await Query("select * from idc_info where (powerPrice_KW_Hour < ? or powerPrice_KW_Hour = 0) and (powerPrice_KW_Month < ? or powerPrice_KW_Month = 0) and (price_AllIn < ? or price_AllIn = 0) and powerAvail_MW > ? and (rackAvail > ? or rackAvail = 0) and approval = 1 and country = ?", [powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, powerAvail_MW, rackAvail, country]);
     } else if(region != -1){
-        data = await Query("select * from idc_info where (powerPrice_KW_Hour < ? or powerPrice_KW_Hour = 0) and (powerPrice_KW_Month < ? or powerPrice_KW_Month = 0) and powerAvail_MW > ? and (rackAvail > ? or rackAvail = 0) and approval = 1 and region = ?", [powerPrice_KW_Hour, powerPrice_KW_Month, powerAvail_MW, rackAvail, region]);
+        data = await Query("select * from idc_info where (powerPrice_KW_Hour < ? or powerPrice_KW_Hour = 0) and (powerPrice_KW_Month < ? or powerPrice_KW_Month = 0) and (price_AllIn < ? or price_AllIn = 0) and powerAvail_MW > ? and (rackAvail > ? or rackAvail = 0) and approval = 1 and region = ?", [powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, powerAvail_MW, rackAvail, region]);
     }else{
-        data = await Query("select * from idc_info where (powerPrice_KW_Hour < ? or powerPrice_KW_Hour = 0) and (powerPrice_KW_Month < ? or powerPrice_KW_Month = 0) and powerAvail_MW > ? and (rackAvail > ? or rackAvail = 0) and approval = 1", [powerPrice_KW_Hour, powerPrice_KW_Month, powerAvail_MW, rackAvail]);
+        data = await Query("select * from idc_info where (powerPrice_KW_Hour < ? or powerPrice_KW_Hour = 0) and (powerPrice_KW_Month < ? or powerPrice_KW_Month = 0) and (price_AllIn < ? or price_AllIn = 0) and powerAvail_MW > ? and (rackAvail > ? or rackAvail = 0) and approval = 1", [powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, powerAvail_MW, rackAvail]);
     }
 
     let singleSelection = [
@@ -68,29 +68,92 @@ module.exports.getCountryList = async function () {
     return data;
 }
 
-module.exports.getIdcList = async function (account, level) {
+module.exports.getIdcList = async function (account, level, dataCenterOner, vocomContactName, remark, approval) {
     let data;
     if (level <= 1) {
-        data = await Query("select dataCenterOner, dataCenterId, dataCenterName,  powerAvail_MW, powerPrice_KW_Hour, powerPrice_KW_Month,  rackAvail, vocomContactName, notes, approval, lastModifiedAt from idc_info order by dataCenterOner");
+        data = await Query("select dataCenterOner, dataCenterId, dataCenterName,  powerAvail_MW, powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, rackAvail, vocomContactName, notes, approval, lastModifiedAt from idc_info order by dataCenterOner");
     } else if (level == 2) {
-        data = await Query("select dataCenterOner, dataCenterId, dataCenterName, powerAvail_MW, powerPrice_KW_Hour, powerPrice_KW_Month, rackAvail, vocomContactName, notes, approval, lastModifiedAt from idc_info where dataCenterOner = ?", [account]);
+        data = await Query("select dataCenterOner, dataCenterId, dataCenterName, powerAvail_MW, powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, rackAvail, vocomContactName, notes, approval, lastModifiedAt from idc_info where dataCenterOner = ?", [account]);
     }
 
     for(let i=0;i<data.length;i++){
         data[i].lastModifiedAt = MOMENT(data[i].lastModifiedAt).format('YYYY-MM-DD HH:mm:ss');
-        if(data[i].powerAvail_MW && (data[i].powerPrice_KW_Hour || data[i].powerPrice_KW_Month) && data[i].rackAvail){
+        if(data[i].powerAvail_MW && (data[i].powerPrice_KW_Hour || data[i].powerPrice_KW_Month || data[i].price_AllIn)){
             data[i].remark = "Modified"
         }else{
             data[i].remark = "Need modified"
         }
 
         if(data[i].approval == 1){
-            data[i].approval = 'Approved'
+            data[i].approvalStatus = 'Approved'
+        }else if(data[i].approval == 2){
+            data[i].approvalStatus = 'Reject'
         }else{
-            data[i].approval = 'Not approved'
+            data[i].approvalStatus = 'Not approved'
         }
     }
+
+    if (dataCenterOner != 0) {
+        if (data.length == 0) {
+            return [];
+        } else {
+            data = data.filter(function (value) {
+                return value.dataCenterOner == dataCenterOner
+            })
+        }
+
+    }
+
+    if (vocomContactName != 0) {
+        if (data.length == 0) {
+            return [];
+        } else {
+            data = data.filter(function (value) {
+                return value.vocomContactName == vocomContactName
+            })
+        }
+
+    }
+
+    if (remark != 0) {
+        if (data.length == 0) {
+            return [];
+        } else {
+            data = data.filter(function (value) {
+                return value.remark == remark
+            })
+        }
+
+    }
+
+    if (approval != 0) {
+        if (data.length == 0) {
+            return [];
+        } else {
+            data = data.filter(function (value) {
+                return value.approval == approval
+            })
+        }
+
+    }
+
     
+
+    return data;
+}
+
+module.exports.getIdcPartnerList = async function (account, level) {
+    let data;
+    if (level <= 1) {
+        data = await Query("select distinct dataCenterOner from idc_info order by dataCenterOner");
+    } else if (level == 2) {
+        data = [{dataCenterOner : account}]
+    }
+    return data;
+}
+
+module.exports.getIdcManagerList = async function () {
+    let data = await Query("select distinct vocomContactName from idc_info");;
 
     return data;
 }
@@ -112,7 +175,7 @@ module.exports.getIdcDetail = async function (dataCenterId) {
     } else {
         data = await Query("select * from idc_info limit 1");
     }
-    //console.log(data)
+
     for(const [key , value] of Object.entries(data[0])){
         if(singleSelection.includes(key)){
             if(value == 0){
@@ -171,6 +234,7 @@ module.exports.updateIDCinfo = async function (
     powerPrice_KW_Hour,
     powerPrice_KW_Month,
     spacePrice_KW,
+    price_AllIn,
     rackMRC,
     priceMRC,
     pricePerKWh,
@@ -204,6 +268,7 @@ module.exports.updateIDCinfo = async function (
         powerPrice_KW_Hour,
         powerPrice_KW_Month,
         spacePrice_KW,
+        price_AllIn,
         rackMRC,
         priceMRC,
         pricePerKWh,
@@ -224,7 +289,12 @@ module.exports.updateIDCinfo = async function (
         potentExpan,
         liquidCoolingReady,
     }
-
+    let keyInformation = {
+        powerAvail_MW,
+        powerPrice_KW_Hour,
+        powerPrice_KW_Month,
+        price_AllIn
+    }
     const needModify_multipleSelection = Object.fromEntries(
         Object.entries(multipleSelection).filter(([key, value]) => value != -1)
     );
@@ -235,6 +305,10 @@ module.exports.updateIDCinfo = async function (
 
     const needModify_singleSelection = Object.fromEntries(
         Object.entries(singleSelection).filter(([key, value]) => value != -2)
+    );
+
+    const keyInformation_changeApproval = Object.fromEntries(
+        Object.entries(keyInformation).filter(([key, value]) => value != -1)
     );
 
     if (Object.keys(needModify_multipleSelection).length) {
@@ -273,6 +347,13 @@ module.exports.updateIDCinfo = async function (
         }
     }
 
+    if (Object.keys(keyInformation_changeApproval).length) {
+        let originalData = await Query(`select approval from idc_info where dataCenterId = ?`, [dataCenterId]);
+        
+        await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [dataCenterId, originalData[0].approval, -1, account])
+        await Query(`update idc_info set approval = -1 where dataCenterId = ?`, [dataCenterId]);
+    }
+
     if(potentExpanDate != -1){
         let originalData = await Query(`select potentExpanDate from idc_info where dataCenterId = ?`, [dataCenterId]);
         await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update potentExpanDate from ? to ?",?)`, [dataCenterId, originalData[0].potentExpanDate, potentExpanDate, account])
@@ -300,12 +381,12 @@ module.exports.updateIDCinfo = async function (
 }
 
 module.exports.updateApproval = async function(account, changeApproval){
-    if(changeApproval){
-        let originalApproval = await Query("select approval from idc_info where dataCenterId = ?",[changeApproval])
-        let changeApprovalTo = originalApproval[0].approval * -1
-        await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [changeApproval, originalApproval[0].approval, changeApprovalTo, account])
-        await Query(`update idc_info set approval = ? where dataCenterId = ?`, [changeApprovalTo, changeApproval]);
-    }
+    let dataCenterId = changeApproval.split(" ")[0];
+    let approval = changeApproval.split(" ")[1];
+
+    let originalApproval = await Query("select approval from idc_info where dataCenterId = ?",[dataCenterId])
+    await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [dataCenterId, originalApproval[0].approval, approval, account])
+    await Query(`update idc_info set approval = ? where dataCenterId = ?`, [approval, dataCenterId]);
 }
 
 module.exports.mailWishList = async function (
