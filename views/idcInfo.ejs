@@ -92,42 +92,81 @@
           <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
           <form name="idcInfo" method="post" action="/idcwebsite/idcInfo" id ="select-form">
             <select name="powerAvail_MW" id="powerAvail_MW" style = "width: 20%;">
+              <% if (powerAvail_MW == 0) { %>
+                <option value="<%=powerAvail_MW%>"> All Avail Power (MW)</option>
+              <% } else { %>
+                <option value="<%=powerAvail_MW%>"> ><%=powerAvail_MW%></option>
+              <% } %>
               <option value="0">All Avail Power (MW)</option>
-              <option value="1000"> >1 </option>
-              <option value="3000"> >3 </option>
-              <option value="6000"> >6 </option>
+              <option value="1.5"> >1.5 </option>
+              <option value="3"> >3 </option>
+              <option value="6"> >6 </option>
+              <option value="12"> >12 </option>
             </select>
             <select name="powerPrice_KW_Hour" id="powerPrice_KW_Hour" style = "width: 20%;">
+              <% if (powerPrice_KW_Hour == 999999) { %>
+                <option value="<%=powerPrice_KW_Hour%>"> All Price Per KWH</option>
+              <% } else { %>
+                <option value="<%=powerPrice_KW_Hour%>"> <<%=powerPrice_KW_Hour%></option>
+              <% } %>
               <option value="999999">All Price Per KWH</option>
+              <option value="0.05"> <0.05 </option>
+              <option value="0.075"> <0.075 </option>
               <option value="0.1"> <0.1 </option>
+              <option value="0.15"> <0.15 </option>
               <option value="0.2"> <0.2 </option>
-              <option value="0.3"> <0.3 </option>
             </select>
             <select name="powerPrice_KW_Month" id="powerPrice_KW_Month" style = "width: 20%;">
+              <% if (powerPrice_KW_Month == 999999) { %>
+                <option value="<%=powerPrice_KW_Month%>"> All Price Per KWMonth</option>
+              <% } else { %>
+                <option value="<%=powerPrice_KW_Month%>"> <<%=powerPrice_KW_Month%></option>
+              <% } %>
               <option value="999999">All Price Per KWMonth</option>
+              <option value="50"> <50 </option>
               <option value="100"> <100 </option>
               <option value="150"> <150 </option>
               <option value="200"> <200 </option>
             </select>
             <select name="price_AllIn" id="price_AllIn" style = "width: 20%;">
-              <option value="999999">All Price_AllIn </option>
-              <option value="100"> <100 </option>
+              <% if (price_AllIn == 999999) { %>
+                <option value="<%=price_AllIn%>"> All Price_All_In</option>
+              <% } else { %>
+                <option value="<%=price_AllIn%>"> <<%=price_AllIn%></option>
+              <% } %>
+              <option value="999999">All Price_All_In </option>
               <option value="150"> <150 </option>
               <option value="200"> <200 </option>
+              <option value="250"> <250 </option>
             </select>
             <br><br>
             <select name="rackAvail" id="rackAvail" style = "width: 20%;">
+              <% if (rackAvail == 0) { %>
+                <option value="<%=rackAvail%>"> All Avail Racks</option>
+              <% } else { %>
+                <option value="<%=rackAvail%>"> <<%=rackAvail%></option>
+              <% } %>
               <option value="0">All Avail Racks</option>
               <option value="500"> >500 </option>
               <option value="1000"> >1000 </option>
             </select>
             <select name="region" id="region" style = "width: 20%;" onchange="updateSecondSelect()">
+              <% if (region == -1) { %>
+                <option value="<%=region%>"> All region</option>
+              <% } else { %>
+                <option value="<%=region%>"> <%=region%></option>
+              <% } %>
               <option value="-1">All region</option>  
               <% for (let i=0; i<RegionList.length ;i++) {%>
                 <option value="<%=RegionList[i].region%>"><%=RegionList[i].region%></option>
               <%}%>
             </select>
             <select  name="country" id="country" style = "width: 20%;">
+              <% if (country == -1) { %>
+                <option value="<%=country%>"> All country</option>
+              <% } else { %>
+                <option value="<%=country%>"> <%=country%></option>
+              <% } %>
               <option value="-1">All country</option>
               <% for (let i=0; i<countryList.length ;i++) {%>
                 <option value="<%=countryList[i].countryName%>"><%=countryList[i].countryName%></option>

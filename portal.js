@@ -215,44 +215,30 @@ app.post('/idcwebsite/idcInfo', async function (req, res) {
     //get parameter from post, write into cookie
     if (req.body.powerPrice_KW_Hour) {
       res.cookie('powerPrice_KW_Hour', req.body.powerPrice_KW_Hour);
-    }else{
-      res.clearCookie("powerPrice_KW_Hour");
     }
     
     if (req.body.powerPrice_KW_Month) {
       res.cookie('powerPrice_KW_Month', req.body.powerPrice_KW_Month);
-    }else{
-      res.clearCookie("powerPrice_KW_Month");
     }
     
     if (req.body.powerAvail_MW) {
       res.cookie('powerAvail_MW', req.body.powerAvail_MW);
-    }else{
-      res.clearCookie("powerAvail_MW");
     }
 
     if (req.body.price_AllIn) {
       res.cookie('price_AllIn', req.body.price_AllIn);
-    }else{
-      res.clearCookie("price_AllIn");
     }
 
     if (req.body.rackAvail){
       res.cookie('rackAvail', req.body.rackAvail);
-    }else{
-      res.clearCookie("rackAvail");
     }
 
     if (req.body.region){
       res.cookie('region', req.body.region);
-    }else{
-      res.clearCookie("region");
     }
 
     if (req.body.country){
       res.cookie('country', req.body.country);
-    }else{
-      res.clearCookie("country");
     }
 
     res.redirect('/idcwebsite/idcInfo');
