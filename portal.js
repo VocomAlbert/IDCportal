@@ -24,6 +24,15 @@ app.use(session({
   cookie: { maxAge: 60000 }
 }));
 
+async function clearIdcInfoCookie(res){
+  res.clearCookie("powerPrice_KW_Hour");
+  res.clearCookie("powerPrice_KW_Month");
+  res.clearCookie("powerAvail_MW");
+  res.clearCookie("price_AllIn");
+  res.clearCookie("rackAvail");
+  res.clearCookie("region");
+  res.clearCookie("country");
+}
 // sellingChannel 
 //API = 1 -> 用套餐計費
 //API = 2 -> 用流量計費
@@ -129,6 +138,7 @@ app.get('/idcwebsite/account', async function (req, res) {
   //check user login informaion, if not login send back to login page
   if (req.cookies.account) {
     //get information from cookie
+    await clearIdcInfoCookie(res)
     res.locals.accountLevel = req.cookies.accountLevel ? req.cookies.accountLevel : 3;
     res.locals.account_changePasswordResult = req.cookies.account_changePasswordResult ? req.cookies.account_changePasswordResult : '-1';
     if (res.locals.account_changePasswordResult == 0) {
@@ -250,6 +260,7 @@ app.post('/idcwebsite/idcInfo', async function (req, res) {
 app.get('/idcwebsite/wishList', async function (req, res) {
   //check user login informaion, if not login send back to login page
   if (req.cookies.account) {
+    await clearIdcInfoCookie(res)
     res.locals.account = req.cookies.account;
     res.locals.accountLevel = req.cookies.accountLevel ? req.cookies.accountLevel : 3;
     res.locals.location_wishList = req.cookies.location_wishList ? req.cookies.location_wishList :0;
@@ -355,6 +366,7 @@ app.post('/idcwebsite/wishList', async function (req, res) {
 app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
   //check user login informaion, if not login send back to login page
   if (req.cookies.account) {
+    await clearIdcInfoCookie(res)
     res.locals.account = req.cookies.account;
     res.locals.accountLevel = req.cookies.accountLevel ? req.cookies.accountLevel : 2;
     res.locals.error = 0;
