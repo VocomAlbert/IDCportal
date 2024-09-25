@@ -92,63 +92,68 @@
           <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
           <form name="idcInfo" method="post" action="/idcwebsite/idcInfo" id ="select-form">
             <select name="powerAvail_MW" id="powerAvail_MW" style = "width: 20%;">
-              <% if (powerAvail_MW == 0) { %>
+              <% if (powerAvail_MW == "0,999") { %>
                 <option value="<%=powerAvail_MW%>"> All Avail Power (MW)</option>
               <% } else { %>
-                <option value="<%=powerAvail_MW%>"> ><%=powerAvail_MW%></option>
+                <option value="<%=powerAvail_MW%>"> <%=powerAvail_MW.split(",")[0]%> ~ <%=powerAvail_MW.split(",")[1]%></option>
               <% } %>
-              <option value="0">All Avail Power (MW)</option>
-              <option value="1.5"> >1.5 </option>
-              <option value="3"> >3 </option>
-              <option value="6"> >6 </option>
-              <option value="12"> >12 </option>
+              <option value="0,999">All Avail Power (MW)</option>
+              <option value="0,1.5"> 0 ~ 1.5 </option>
+              <option value="1.5,3"> 1.5 ~ 3 </option>
+              <option value="3,6"> 3 ~ 6 </option>
+              <option value="6,12"> 6 ~ 12 </option>
+              <option value="12,999"> 12 ~ 999 </option>
             </select>
             <select name="powerPrice_KW_Hour" id="powerPrice_KW_Hour" style = "width: 20%;">
-              <% if (powerPrice_KW_Hour == 999999) { %>
+              <% if (powerPrice_KW_Hour == "0,999") { %>
                 <option value="<%=powerPrice_KW_Hour%>"> All Price Per KWH</option>
               <% } else { %>
-                <option value="<%=powerPrice_KW_Hour%>"> <<%=powerPrice_KW_Hour%></option>
+                <option value="<%=powerPrice_KW_Hour%>"> <%=powerPrice_KW_Hour.split(",")[0]%> ~ <%=powerPrice_KW_Hour.split(",")[1]%></option>
               <% } %>
-              <option value="999999">All Price Per KWH</option>
-              <option value="0.05"> <0.05 </option>
-              <option value="0.075"> <0.075 </option>
-              <option value="0.1"> <0.1 </option>
-              <option value="0.15"> <0.15 </option>
-              <option value="0.2"> <0.2 </option>
+              <option value="0,999">All Price Per KWH</option>
+              <option value="0,0.05"> 0 ~ 0.05 </option>
+              <option value="0.05,0.075"> 0.05 ~ 0.075 </option>
+              <option value="0.075,0.1"> 0.075 ~ 0.1 </option>
+              <option value="0.1,0.15"> 0.1 ~ 0.15 </option>
+              <option value="0.15,0.2"> 0.15 ~ 0.2 </option>
+              <option value="0.2,999"> 0.2 ~ 999 </option>
             </select>
             <select name="powerPrice_KW_Month" id="powerPrice_KW_Month" style = "width: 20%;">
-              <% if (powerPrice_KW_Month == 999999) { %>
+              <% if (powerPrice_KW_Month == "0,999") { %>
                 <option value="<%=powerPrice_KW_Month%>"> All Price Per KWMonth</option>
               <% } else { %>
-                <option value="<%=powerPrice_KW_Month%>"> <<%=powerPrice_KW_Month%></option>
+                <option value="<%=powerPrice_KW_Month%>"> <%=powerPrice_KW_Month.split(",")[0]%> ~ <%=powerPrice_KW_Month.split(",")[1]%></option>
               <% } %>
-              <option value="999999">All Price Per KWMonth</option>
-              <option value="50"> <50 </option>
-              <option value="100"> <100 </option>
-              <option value="150"> <150 </option>
-              <option value="200"> <200 </option>
+              <option value="0,999">All Price Per KWMonth</option>
+              <option value="0,50"> 0 ~ 50 </option>
+              <option value="50,100"> 50 ~ 100 </option>
+              <option value="100,150"> 100 ~ 150 </option>
+              <option value="150,200"> 150 ~ 200 </option>
+              <option value="200,999"> 200 ~ 999 </option>
             </select>
             <select name="price_AllIn" id="price_AllIn" style = "width: 20%;">
-              <% if (price_AllIn == 999999) { %>
+              <% if (price_AllIn == "0,999") { %>
                 <option value="<%=price_AllIn%>"> All Price_All_In</option>
               <% } else { %>
-                <option value="<%=price_AllIn%>"> <<%=price_AllIn%></option>
+                <option value="<%=price_AllIn%>"> <%=price_AllIn.split(",")[0]%> ~ <%=price_AllIn.split(",")[1]%></option>
               <% } %>
-              <option value="999999">All Price_All_In </option>
-              <option value="150"> <150 </option>
-              <option value="200"> <200 </option>
-              <option value="250"> <250 </option>
+              <option value="0,999">All Price_All_In </option>
+              <option value="0,150"> 0 ~ 150 </option>
+              <option value="150,200"> 150 ~ 200 </option>
+              <option value="200,250"> 200 ~ 250 </option>
+              <option value="250,999"> 250 ~ 999 </option>
             </select>
             <br><br>
             <select name="rackAvail" id="rackAvail" style = "width: 20%;">
-              <% if (rackAvail == 0) { %>
+              <% if (rackAvail == "0,9999") { %>
                 <option value="<%=rackAvail%>"> All Avail Racks</option>
               <% } else { %>
-                <option value="<%=rackAvail%>"> <<%=rackAvail%></option>
+                <option value="<%=rackAvail%>"> <%=rackAvail.split(",")[0]%> ~ <%=rackAvail.split(",")[1]%></option>
               <% } %>
-              <option value="0">All Avail Racks</option>
-              <option value="500"> >500 </option>
-              <option value="1000"> >1000 </option>
+              <option value="0,9999">All Avail Racks</option>
+              <option value="0,500"> 0 ~ 500 </option>
+              <option value="500,1000"> 500 ~ 1000 </option>
+              <option value="1000,9999"> 1000 ~ 9999 </option>
             </select>
             <select name="region" id="region" style = "width: 20%;" onchange="updateSecondSelect()">
               <% if (region == -1) { %>

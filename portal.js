@@ -187,15 +187,15 @@ app.get('/idcwebsite/idcInfo', async function (req, res) {
   if (req.cookies.account) {
     res.locals.account = req.cookies.account;
     res.locals.accountLevel = req.cookies.accountLevel ? req.cookies.accountLevel : 3;
-    res.locals.powerPrice_KW_Hour = req.cookies.powerPrice_KW_Hour ? req.cookies.powerPrice_KW_Hour : 999999;
-    res.locals.powerPrice_KW_Month = req.cookies.powerPrice_KW_Month ? req.cookies.powerPrice_KW_Month : 999999;
-    res.locals.price_AllIn = req.cookies.price_AllIn ? req.cookies.price_AllIn : 999999;
-    res.locals.powerAvail_MW = req.cookies.powerAvail_MW ? req.cookies.powerAvail_MW : 0;
-    res.locals.rackAvail = req.cookies.rackAvail ? req.cookies.rackAvail : 0;
+    res.locals.powerPrice_KW_Hour = req.cookies.powerPrice_KW_Hour ? req.cookies.powerPrice_KW_Hour : "0,999";
+    res.locals.powerPrice_KW_Month = req.cookies.powerPrice_KW_Month ? req.cookies.powerPrice_KW_Month : "0,999";
+    res.locals.price_AllIn = req.cookies.price_AllIn ? req.cookies.price_AllIn : "0,999";
+    res.locals.powerAvail_MW = req.cookies.powerAvail_MW ? req.cookies.powerAvail_MW : '0,999';
+    res.locals.rackAvail = req.cookies.rackAvail ? req.cookies.rackAvail : "0,9999";
     res.locals.region = req.cookies.region ? req.cookies.region : -1;
     res.locals.country = req.cookies.country ? req.cookies.country : -1;
     res.locals.flag = 1;
-    //res.locals.pricePerRack = 
+     
     let idc_info = await idcFunction.getIdc_Info(res.locals.powerPrice_KW_Hour, res.locals.powerPrice_KW_Month, res.locals.price_AllIn, res.locals.powerAvail_MW, res.locals.rackAvail, res.locals.region, res.locals.country);
     res.locals.idc_info = idc_info;
  
