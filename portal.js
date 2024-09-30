@@ -443,6 +443,7 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     if(!res.locals.dataCenterId){
       if(idcList.length){
         res.locals.dataCenterId = idcList[0].dataCenterId
+        res.cookie('dataCenterId', res.locals.dataCenterId);
       }else{
         res.locals.dataCenterId = 'Minnesota1'
       }
