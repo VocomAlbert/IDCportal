@@ -538,26 +538,18 @@ app.post('/idcwebsite/modifyIdcInfo', async function (req, res) {
     //idc filter
     if (req.body.dataCenterOner) {
       res.cookie('dataCenterOner', req.body.dataCenterOner);
-    }else{
-      res.clearCookie("dataCenterOner");
     }
 
     if (req.body.vocomContactName) {
       res.cookie('vocomContactName', req.body.vocomContactName);
-    }else{
-      res.clearCookie("vocomContactName");
     }
 
     if (req.body.remark) {
       res.cookie('remark', req.body.remark);
-    }else{
-      res.clearCookie("remark");
     }
 
     if (req.body.approval) {
       res.cookie('approval', req.body.approval);
-    }else{
-      res.clearCookie("approval");
     }
 
     if (req.body.changeApproval) {

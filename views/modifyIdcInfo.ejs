@@ -107,23 +107,35 @@
         <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
         <form name="idcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id ="select-form">
           <select name="dataCenterOner" id="dataCenterOner" style = "width: 20%;">
+            <% if (dataCenterOner != 0 ) { %>
+              <option value="<%=dataCenterOner%>"> <%=dataCenterOner%></option>
+            <% } %>
             <option value='0'> Partner</option>
             <% for ( let i=0 ; i<idcPartnerList.length ; i++ ) { %>
               <option value="<%=idcPartnerList[i].dataCenterOner%>"> <%=idcPartnerList[i].dataCenterOner%></option>
             <% } %>
           </select>
           <select name="vocomContactName" id="vocomContactName" style = "width: 20%;">
+            <% if (vocomContactName != 0 ) { %>
+              <option value="<%=vocomContactName%>"> <%=vocomContactName%></option>
+            <% } %>
             <option value='0'> Manager</option>
             <% for ( let i=0 ; i<idcManagerList.length ; i++ ) { %>
               <option value="<%=idcManagerList[i].vocomContactName%>"> <%=idcManagerList[i].vocomContactName%></option>
             <% } %>
           </select>
           <select name="remark" id="remark" style = "width: 20%;">
+            <% if (remark != 0 ) { %>
+              <option value="<%=remark%>"> <%=remark%></option>
+            <% } %>
             <option value='0'> Remark</option>
             <option value='Modified'> Modified</option>
             <option value='Need modified'> Need modified	</option>
           </select>
           <select name="approval" id="approval" style = "width: 20%;">
+            <% if (approval != 0 ) { %>
+              <option value="<%=approval%>"> <%=approval%></option>
+            <% } %>
             <option value='0'> Approval Status</option>
             <option value='-1'> Not approved</option>
             <option value='1'> Approved</option>

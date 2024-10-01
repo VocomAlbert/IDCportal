@@ -314,8 +314,9 @@ module.exports.updateIDCinfo = async function (
     if (Object.keys(needModify_multipleSelection).length) {
         for (const [key, value] of Object.entries(needModify_multipleSelection)) {
             //check if only one selected, only one : string, more than one : array
+            let valueList
             if (value[0].length > 1) {
-                let valueList = value[0];
+                    valueList = value[0];
                 for (let i = 1; i < value.length; i++) {
                     valueList += ',' + value[i];
                 }
@@ -381,8 +382,11 @@ module.exports.updateIDCinfo = async function (
 }
 
 module.exports.updateApproval = async function(account, changeApproval){
-    let dataCenterId = changeApproval.split(" ")[0];
-    let approval = changeApproval.split(" ")[1];
+    let tmp = changeApproval.split(" ")
+    let approval = tmp[tmp.length - 1];
+    tmp.pop()
+    let dataCenterId = tmp.join(' ');
+    
 
     let originalApproval = await Query("select approval from idc_info where dataCenterId = ?",[dataCenterId])
     await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [dataCenterId, originalApproval[0].approval, approval, account])
