@@ -33,6 +33,12 @@ async function clearIdcInfoCookie(res){
   res.clearCookie("region");
   res.clearCookie("country");
 }
+async function clearIdcModifyCookie(res){
+  res.clearCookie("dataCenterOner");
+  res.clearCookie("vocomContactName");
+  res.clearCookie("remark");
+  res.clearCookie("approval");
+}
 // sellingChannel 
 //API = 1 -> 用套餐計費
 //API = 2 -> 用流量計費
@@ -139,6 +145,7 @@ app.get('/idcwebsite/account', async function (req, res) {
   if (req.cookies.account) {
     //get information from cookie
     await clearIdcInfoCookie(res)
+    await clearIdcModifyCookie(res)
     res.locals.accountLevel = req.cookies.accountLevel ? req.cookies.accountLevel : 3;
     res.locals.account_changePasswordResult = req.cookies.account_changePasswordResult ? req.cookies.account_changePasswordResult : '-1';
     if (res.locals.account_changePasswordResult == 0) {
@@ -185,6 +192,7 @@ app.get('/idcwebsite/main', async function (req, res) {
 app.get('/idcwebsite/idcInfo', async function (req, res) {
   //check user login informaion, if not login send back to login page
   if (req.cookies.account) {
+    await clearIdcModifyCookie(res)
     res.locals.account = req.cookies.account;
     res.locals.accountLevel = req.cookies.accountLevel ? req.cookies.accountLevel : 3;
     res.locals.powerPrice_KW_Hour = req.cookies.powerPrice_KW_Hour ? req.cookies.powerPrice_KW_Hour : "0,999";
@@ -261,6 +269,7 @@ app.get('/idcwebsite/wishList', async function (req, res) {
   //check user login informaion, if not login send back to login page
   if (req.cookies.account) {
     await clearIdcInfoCookie(res)
+    await clearIdcModifyCookie(res)
     res.locals.account = req.cookies.account;
     res.locals.accountLevel = req.cookies.accountLevel ? req.cookies.accountLevel : 3;
     res.locals.location_wishList = req.cookies.location_wishList ? req.cookies.location_wishList :0;
