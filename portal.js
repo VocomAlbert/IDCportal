@@ -385,7 +385,7 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     res.locals.dataCenterOner = req.cookies.dataCenterOner ? req.cookies.dataCenterOner : 0;
     res.locals.vocomContactName = req.cookies.vocomContactName ? req.cookies.vocomContactName : 0;
     res.locals.remark = req.cookies.remark ? req.cookies.remark : 0;
-    res.locals.approval = req.cookies.approval ? req.cookies.approval : 0;
+    res.locals.approval = req.cookies.approval ? req.cookies.approval : 2;
     //modify data
     //multiple selection
     res.locals.certificationTier_modify = req.cookies.certificationTier_modify ? req.cookies.certificationTier_modify : -1;

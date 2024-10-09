@@ -120,13 +120,13 @@
             <option value='Need modified'> Need modified	</option>
           </select>
           <select name="approval" id="approval" style = "width: 20%;">
-            <% if (approval != 0 ) { %>
+            <% if (approval != 2 ) { %>
               <option value="<%=approval%>"> <%=approval%></option>
             <% } %>
-            <option value='0'> Approval Status</option>
-            <option value='-1'> Not approved</option>
+            <option value='2'> Approval Status</option>
+            <option value='0'> Not approved</option>
             <option value='1'> Approved</option>
-            <option value='2'> Rejected</option>
+            <option value='-1'> Rejected</option>
           </select>
           <button class="btn btn-secondary my-2 my-sm-0 " type="submit" >Search <i class="fa fa-search" aria-hidden="true"></i></button>
         </form>
@@ -178,7 +178,7 @@
                 <%if (accountLevel == 0) { %>
                   <td><form action="/idcwebsite/modifyIdcInfo" method="post">
                     <!-- <button type="submit" name="EM_esimStatus_refresh" value="1" class="fill">Refresh</button> -->
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="changeApproval" value="<%= idcList[i].dataCenterId%> 2" style="background-color: red;">Reject</button>
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="changeApproval" value="<%= idcList[i].dataCenterId%> -1" style="background-color: red;">Reject</button>
                   </form></td>
                   <% } %>
                 <td><%= idcList[i].lastModifiedAt%></td>

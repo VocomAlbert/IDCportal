@@ -86,7 +86,7 @@ module.exports.getIdcList = async function (account, level, dataCenterOner, voco
 
         if(data[i].approval == 1){
             data[i].approvalStatus = 'Approved'
-        }else if(data[i].approval == 2){
+        }else if(data[i].approval == -1){
             data[i].approvalStatus = 'Reject'
         }else{
             data[i].approvalStatus = 'Not approved'
@@ -126,7 +126,7 @@ module.exports.getIdcList = async function (account, level, dataCenterOner, voco
 
     }
 
-    if (approval != 0) {
+    if (approval != 2) {
         if (data.length == 0) {
             return [];
         } else {
