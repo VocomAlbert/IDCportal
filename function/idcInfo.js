@@ -351,8 +351,8 @@ module.exports.updateIDCinfo = async function (
     if (Object.keys(keyInformation_changeApproval).length) {
         let originalData = await Query(`select approval from idc_info where dataCenterId = ?`, [dataCenterId]);
         
-        await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [dataCenterId, originalData[0].approval, -1, account])
-        await Query(`update idc_info set approval = -1 where dataCenterId = ?`, [dataCenterId]);
+        await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [dataCenterId, originalData[0].approval, 0, account])
+        await Query(`update idc_info set approval = 0 where dataCenterId = ?`, [dataCenterId]);
     }
 
     if(potentExpanDate != -1){
