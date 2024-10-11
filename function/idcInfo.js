@@ -7,6 +7,7 @@ const FS = require('fs');
 const PATH = require('path');
 require('dotenv').config({ path: PATH.resolve(__dirname, '../.env') });
 
+
 module.exports.getIdc_Info = async function (powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, powerAvail_MW, rackAvail, region, country) {
     let data;
     if (country != -1) {
@@ -73,12 +74,13 @@ module.exports.getCountryList = async function () {
 module.exports.getIdcList = async function (account, level, dataCenterOner, vocomContactName, remark, approval) {
     let data;
     if (level <= 1) {
-        data = await Query("select dataCenterOner, dataCenterId, dataCenterName,  powerAvail_MW, powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, rackAvail, vocomContactName, notes, approval, lastModifiedAt from idc_info order by dataCenterOner");
+        data = await Query("select * from idc_info order by dataCenterOner");
     } else if (level == 2) {
-        data = await Query("select dataCenterOner, dataCenterId, dataCenterName, powerAvail_MW, powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, rackAvail, vocomContactName, notes, approval, lastModifiedAt from idc_info where dataCenterOner = ?", [account]);
+        data = await Query("select * from idc_info where dataCenterOner = ?", [account]);
     }
 
     for(let i=0;i<data.length;i++){
+        data[i].createdAt = MOMENT(data[i].createdAt).format('YYYY-MM-DD HH:mm:ss');
         data[i].lastModifiedAt = MOMENT(data[i].lastModifiedAt).format('YYYY-MM-DD HH:mm:ss');
         if(data[i].powerAvail_MW && (data[i].powerPrice_KW_Hour || data[i].powerPrice_KW_Month || data[i].price_AllIn)){
             data[i].remark = "Modified"
@@ -138,6 +140,14 @@ module.exports.getIdcList = async function (account, level, dataCenterOner, voco
         }
 
     }
+    for(let i=0;i<data.length;i++){
+        for(const [key , value] of Object.entries(data[i])){
+            if(!value){
+                data[i][key] = ''
+            }
+        }
+    }
+    
 
     
 
@@ -157,40 +167,6 @@ module.exports.getIdcPartnerList = async function (account, level) {
 module.exports.getIdcManagerList = async function () {
     let data = await Query("select distinct vocomContactName from idc_info");;
 
-    return data;
-}
-
-module.exports.getIdcDetail = async function (dataCenterId) {
-    let data;
-    let singleSelection = [
-        "powerDualSupply",
-        "nPlusOneBackUp",
-        "fiberDualEntry",
-        "potentExpan",
-        "liquidCoolingReady",
-        "countractSigned",
-    ]
-        
-    
-    if (dataCenterId) {
-        data = await Query("select * from idc_info where dataCenterId = ?", [dataCenterId]);
-    } else {
-        data = await Query("select * from idc_info limit 1");
-    }
-
-    for(const [key , value] of Object.entries(data[0])){
-        if(singleSelection.includes(key)){
-            if(value == 0){
-                data[0][key] = 'Not comfirmed'
-            }else if(value == 1){
-                data[0][key] = 'Yes'
-            }else{
-                data[0][key] = 'No'
-            }
-        }else if(!value){
-            data[0][key] = 'No Data'
-        }
-    }
     return data;
 }
 
@@ -221,6 +197,7 @@ module.exports.getDateList = async function () {
         }
 
     }
+    data.unshift("Not comfirmed");
     return data;
 }
 
@@ -256,6 +233,9 @@ module.exports.updateIDCinfo = async function (
     reservationRequirement,
     potentExpanDate,
     liquidCoolingReadyDate,
+    countractSigned,
+    approval,
+    commission,
     notes,
 ) {
     let multipleSelection = {
@@ -282,7 +262,8 @@ module.exports.updateIDCinfo = async function (
         minContractTerm,
         reservationRequirement,
         fuelTankCap_Liters,
-        fuelTankCap_hour
+        fuelTankCap_hour,
+        commission
     }
     let singleSelection = {
         powerDualSupply,
@@ -290,6 +271,8 @@ module.exports.updateIDCinfo = async function (
         fiberDualEntry,
         potentExpan,
         liquidCoolingReady,
+        countractSigned,
+        approval
     }
     let keyInformation = {
         powerAvail_MW,
@@ -327,17 +310,11 @@ module.exports.updateIDCinfo = async function (
             }
             let originalData = await Query(`select ${key} from idc_info where dataCenterId = ?`, [dataCenterId]);
             let keys = Object.keys(originalData[0]);
-            await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update ${key} from ? to ?",?)`, [dataCenterId, originalData[0][keys[0]], valueList, account])
-            await Query(`update idc_info set ${key} = ? where dataCenterId = ?`, [valueList, dataCenterId]);
-        }
-    }
-
-    if (Object.keys(needModify_number).length) {
-        for (const [key, value] of Object.entries(needModify_number)) {
-            let originalData = await Query(`select ${key} from idc_info where dataCenterId = ?`, [dataCenterId]);
-            let keys = Object.keys(originalData[0]);
-            await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update ${key} from ? to ?",?)`, [dataCenterId, originalData[0][keys[0]], value, account])
-            await Query(`update idc_info set ${key} = ? where dataCenterId = ?`, [value, dataCenterId]);
+            if(originalData[0][keys[0]] != valueList){
+                await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update ${key} from ? to ?",?)`, [dataCenterId, originalData[0][keys[0]], valueList, account])
+                await Query(`update idc_info set ${key} = ? where dataCenterId = ?`, [valueList, dataCenterId]);
+            }
+            
         }
     }
 
@@ -345,28 +322,49 @@ module.exports.updateIDCinfo = async function (
         for (const [key, value] of Object.entries(needModify_singleSelection)) {
             let originalData = await Query(`select ${key} from idc_info where dataCenterId = ?`, [dataCenterId]);
             let keys = Object.keys(originalData[0]);
-            await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update ${key} from ? to ?",?)`, [dataCenterId, originalData[0][keys[0]], value, account])
-            await Query(`update idc_info set ${key} = ? where dataCenterId = ?`, [value, dataCenterId]);
+            if(originalData[0][keys[0]] != value){
+                await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update ${key} from ? to ?",?)`, [dataCenterId, originalData[0][keys[0]], value, account])
+                await Query(`update idc_info set ${key} = ? where dataCenterId = ?`, [value, dataCenterId]);
+            }
         }
     }
 
-    if (Object.keys(keyInformation_changeApproval).length) {
-        let originalData = await Query(`select approval from idc_info where dataCenterId = ?`, [dataCenterId]);
-        
-        await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [dataCenterId, originalData[0].approval, 0, account])
-        await Query(`update idc_info set approval = 0 where dataCenterId = ?`, [dataCenterId]);
+    if (Object.keys(needModify_number).length) {
+        for (const [key, value] of Object.entries(needModify_number)) {
+            let originalData = await Query(`select ${key} from idc_info where dataCenterId = ?`, [dataCenterId]);
+            let keys = Object.keys(originalData[0]);
+            let changeApprovalKeys = Object.keys(keyInformation_changeApproval);
+            
+            if(originalData[0][keys[0]] != value){
+                if(changeApprovalKeys.includes(key)){
+                    let approvaldata = await Query(`select approval from idc_info where dataCenterId = ?`, [dataCenterId]);
+                    let approvalkeys = Object.keys(approvaldata[0]);
+                    if(approvaldata[0][approvalkeys[0]] != 0){
+                        await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [dataCenterId, approvaldata[0].approval, 0, 'system'])
+                        await Query(`update idc_info set approval = 0 where dataCenterId = ?`, [dataCenterId]);
+                    }
+                }
+                await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update ${key} from ? to ?",?)`, [dataCenterId, originalData[0][keys[0]], value, account])
+                await Query(`update idc_info set ${key} = ? where dataCenterId = ?`, [value, dataCenterId]);
+            }
+        }
     }
 
     if(potentExpanDate != -1){
         let originalData = await Query(`select potentExpanDate from idc_info where dataCenterId = ?`, [dataCenterId]);
-        await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update potentExpanDate from ? to ?",?)`, [dataCenterId, originalData[0].potentExpanDate, potentExpanDate, account])
-        await Query(`update idc_info set potentExpanDate = ? where dataCenterId = ?`, [potentExpanDate, dataCenterId]);
+        if(originalData[0].potentExpanDate != potentExpanDate){
+            await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update potentExpanDate from ? to ?",?)`, [dataCenterId, originalData[0].potentExpanDate, potentExpanDate, account])
+            await Query(`update idc_info set potentExpanDate = ? where dataCenterId = ?`, [potentExpanDate, dataCenterId]);
+        }
+        
     }
 
     if(liquidCoolingReadyDate != -1){
         let originalData = await Query(`select liquidCoolingReadyDate from idc_info where dataCenterId = ?`, [dataCenterId]);
-        await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update liquidCoolingReadyDate from ? to ?",?)`, [dataCenterId, originalData[0].liquidCoolingReadyDate, liquidCoolingReadyDate, account])
-        await Query(`update idc_info set liquidCoolingReadyDate = ? where dataCenterId = ?`, [liquidCoolingReadyDate, dataCenterId]);
+        if(originalData[0].liquidCoolingReadyDate != liquidCoolingReadyDate){
+            await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update liquidCoolingReadyDate from ? to ?",?)`, [dataCenterId, originalData[0].liquidCoolingReadyDate, liquidCoolingReadyDate, account])
+            await Query(`update idc_info set liquidCoolingReadyDate = ? where dataCenterId = ?`, [liquidCoolingReadyDate, dataCenterId]);
+        }
     }
     if(notes){
         const pattern = /[!@#$%^&*+{}:><?;]/;
@@ -375,24 +373,14 @@ module.exports.updateIDCinfo = async function (
             return 0;
         }else{
             let originalData = await Query(`select notes from idc_info where dataCenterId = ?`, [dataCenterId]);
-            await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update notes from ? to ?",?)`, [dataCenterId, originalData[0].notes, potentExpanDate, account])
-            await Query(`update idc_info set notes = ? where dataCenterId = ?`, [notes, dataCenterId]);
+            if(originalData[0].notes != notes){
+                await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update notes from ? to ?",?)`, [dataCenterId, originalData[0].notes, notes, account])
+                await Query(`update idc_info set notes = ? where dataCenterId = ?`, [notes, dataCenterId]);
+            }
         }
     }
     
     return 1;
-}
-
-module.exports.updateApproval = async function(account, changeApproval){
-    let tmp = changeApproval.split(" ")
-    let approval = tmp[tmp.length - 1];
-    tmp.pop()
-    let dataCenterId = tmp.join(' ');
-    
-
-    let originalApproval = await Query("select approval from idc_info where dataCenterId = ?",[dataCenterId])
-    await Query(`insert into idc_history (dataCenterId, notes, modifiedBy) values (?,"update approval from ? to ?",?)`, [dataCenterId, originalApproval[0].approval, approval, account])
-    await Query(`update idc_info set approval = ? where dataCenterId = ?`, [approval, dataCenterId]);
 }
 
 module.exports.mailWishList = async function (

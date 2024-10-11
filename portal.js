@@ -93,11 +93,14 @@ app.get('/idcwebsite', async function (req, res) {
   res.clearCookie("minContractTerm_modify");
   res.clearCookie("reservationRequirement_modify");
   res.clearCookie("notes_modify");
-  res.clearCookie("changeApproval");
+  // res.clearCookie("changeApproval");
   res.clearCookie("dataCenterOner");
   res.clearCookie("vocomContactName");
   res.clearCookie("remark");
   res.clearCookie("approval");
+  res.clearCookie("countractSigned_modify");
+  res.clearCookie("approval_modify");
+  res.clearCookie("commission_modify");
 
   //wishList
   res.clearCookie("location_wishList");
@@ -391,6 +394,7 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     res.locals.certificationTier_modify = req.cookies.certificationTier_modify ? req.cookies.certificationTier_modify : -1;
     res.locals.certificationISO_modify = req.cookies.certificationISO_modify ? req.cookies.certificationISO_modify : -1;
     //number
+    res.locals.dataCenterId_modify = req.cookies.dataCenterId_modify ? req.cookies.dataCenterId_modify : -1;
     res.locals.powerTotal_MW_modify = req.cookies.powerTotal_MW_modify ? req.cookies.powerTotal_MW_modify : -1;
     res.locals.powerAvail_MW_modify = req.cookies.powerAvail_MW_modify ? req.cookies.powerAvail_MW_modify : -1;
     res.locals.fuelTankCap_Liters_modify = req.cookies.fuelTankCap_Liters_modify ? req.cookies.fuelTankCap_Liters_modify : -1;
@@ -411,29 +415,21 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     res.locals.rackAvail_modify = req.cookies.rackAvail_modify ? req.cookies.rackAvail_modify : -1;
     res.locals.minContractTerm_modify = req.cookies.minContractTerm_modify ? req.cookies.minContractTerm_modify : -1;
     res.locals.reservationRequirement_modify = req.cookies.reservationRequirement_modify ? req.cookies.reservationRequirement_modify : -1;
+    res.locals.commission_modify = req.cookies.commission_modify ? req.cookies.commission_modify : -1;
     //enum(1,0,-1) -> selection
     res.locals.powerDualSupply_modify = req.cookies.powerDualSupply_modify ? req.cookies.powerDualSupply_modify : -2;
     res.locals.nPlusOneBackUp_modify = req.cookies.nPlusOneBackUp_modify ? req.cookies.nPlusOneBackUp_modify : -2;
     res.locals.fiberDualEntry_modify = req.cookies.fiberDualEntry_modify ? req.cookies.fiberDualEntry_modify : -2;
     res.locals.potentExpan_modify = req.cookies.potentExpan_modify ? req.cookies.potentExpan_modify : -2;
     res.locals.liquidCoolingReady_modify = req.cookies.liquidCoolingReady_modify ? req.cookies.liquidCoolingReady_modify : -2;
-    
+    res.locals.countractSigned_modify = req.cookies.countractSigned_modify ? req.cookies.countractSigned_modify : -2;
+    res.locals.approval_modify = req.cookies.approval_modify ? req.cookies.approval_modify : -2;
     //selection
     res.locals.potentExpanDate_modify = req.cookies.potentExpanDate_modify ? req.cookies.potentExpanDate_modify : -1;
     res.locals.liquidCoolingReadyDate_modify = req.cookies.liquidCoolingReadyDate_modify ? req.cookies.liquidCoolingReadyDate_modify : -1;
     //text
     res.locals.notes_modify = req.cookies.notes_modify ? req.cookies.notes_modify : '';
-
-    res.locals.changeApproval = req.cookies.changeApproval ? req.cookies.changeApproval : '';
-
-    if(res.locals.changeApproval){
-      await idcFunction.updateApproval(res.locals.account,res.locals.changeApproval);
-    }
-
-    res.locals.idcList;
-    let idcList = await idcFunction.getIdcList(res.locals.account, res.locals.accountLevel, res.locals.dataCenterOner, res.locals.vocomContactName, res.locals.remark, res.locals.approval);
-    res.locals.idcList = idcList;
-
+    
     let certificationTierList = await idcFunction.getCertificationTier();
     res.locals.certificationTierList = certificationTierList;
 
@@ -447,21 +443,10 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     res.locals.idcPartnerList = idcPartnerList
     let idcManagerList = await idcFunction.getIdcManagerList();
     res.locals.idcManagerList = idcManagerList
-
-    //應急處理 之後要改
-    if(!res.locals.dataCenterId){
-      if(idcList.length){
-        res.locals.dataCenterId = idcList[0].dataCenterId
-        res.cookie('dataCenterId', res.locals.dataCenterId);
-      }else{
-        res.locals.dataCenterId = 'Minnesota1'
-      }
-      
-    }
     
     let idcinfoupdate = await idcFunction.updateIDCinfo(
       res.locals.account,
-      res.locals.dataCenterId,
+      res.locals.dataCenterId_modify,
       res.locals.certificationTier_modify,
       res.locals.certificationISO_modify,
       res.locals.powerTotal_MW_modify,
@@ -491,20 +476,23 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.locals.reservationRequirement_modify,
       res.locals.potentExpanDate_modify,
       res.locals.liquidCoolingReadyDate_modify,
-      res.locals.notes_modify
+      res.locals.countractSigned_modify,
+      res.locals.approval_modify,
+      res.locals.commission_modify,
+      res.locals.notes_modify 
     )
 
     if(!idcinfoupdate){
       res.locals.error = 1;
     }
-
-
+    res.locals.idcList;
+    let idcList = await idcFunction.getIdcList(res.locals.account, res.locals.accountLevel, res.locals.dataCenterOner, res.locals.vocomContactName, res.locals.remark, res.locals.approval);
+    res.locals.idcList = idcList;
+    
     if(res.locals.accountLevel == 3){
       res.redirect('/idcwebsite');
     }else{
-      let idcDetail = await idcFunction.getIdcDetail(res.locals.dataCenterId)
-      res.locals.idcDetail = idcDetail;
-
+      res.clearCookie("dataCenterId_modify");
       res.clearCookie("certificationTier_modify");
       res.clearCookie("certificationISO_modify");
       res.clearCookie("powerTotal_MW_modify");
@@ -531,9 +519,12 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.clearCookie("potentExpan_modify");
       res.clearCookie("liquidCoolingReady_modify");
       res.clearCookie("liquidCoolingReadyDate_modify");
+      res.clearCookie("countractSigned_modify");
+      res.clearCookie("approval_modify");
+      res.clearCookie("commission_modify");
       res.clearCookie("potentExpanDate_modify");
       res.clearCookie("notes_modify");
-      res.clearCookie("changeApproval");
+      // res.clearCookie("changeApproval");
       res.render("modifyIdcInfo");
     }
   } else {
@@ -561,15 +552,15 @@ app.post('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.cookie('approval', req.body.approval);
     }
 
-    if (req.body.changeApproval) {
-      res.cookie('changeApproval', req.body.changeApproval);
-    }else{
-      res.clearCookie("changeApproval");
-    }
-
     //get parameter from post, write into cookie, modify idc infromation
     if (req.body.dataCenterId) {
       res.cookie('dataCenterId', req.body.dataCenterId);
+    }
+
+    if (req.body.dataCenterId_modify) {
+      res.cookie('dataCenterId_modify', req.body.dataCenterId_modify);
+    }else{
+      res.clearCookie("dataCenterId_modify");
     }
 
     if (req.body.certificationTier_modify) {
@@ -734,6 +725,18 @@ app.post('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.clearCookie("liquidCoolingReadyDate_modify");
     }
 
+    if (req.body.countractSigned_modify) {
+      res.cookie('countractSigned_modify', req.body.countractSigned_modify);
+    }else{
+      res.clearCookie("countractSigned_modify");
+    }
+
+    if (req.body.commission_modify) {
+      res.cookie('commission_modify', req.body.commission_modify);
+    }else{
+      res.clearCookie("commission_modify");
+    }
+
     if (req.body.minContractTerm_modify) {
       res.cookie('minContractTerm_modify', req.body.minContractTerm_modify);
     }else{
@@ -750,6 +753,12 @@ app.post('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.cookie('notes_modify', req.body.notes_modify);
     }else{
       res.clearCookie("notes_modify");
+    }
+
+    if (req.body.approval_modify) {
+      res.cookie('approval_modify', req.body.approval_modify);
+    }else{
+      res.clearCookie("approval_modify");
     }
     
     res.redirect('/idcwebsite/modifyIdcInfo');

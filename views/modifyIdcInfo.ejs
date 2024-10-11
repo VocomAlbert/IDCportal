@@ -34,601 +34,133 @@
 </head>
 
 <body>
-   <div class="modal fade" id="idcDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style = 'z-index: 10000;'>
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <input type="text" class="form-control" id="recipient-name">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style = 'z-index: 10000;'>
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <input type="text" class="form-control" id="recipient-name">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div>
-    <%- include navbar.ejs %>
-    <input type ="checkbox" id="right-text-switch">
-    <div class="right-text-container">
-      <% if ( error == 1) { %>
-        <script type="text/javascript">
-          showAlert = function() {
-            alert(`Special characters and words is not allowed!(!@#$%^&*+{}:&gt&lt?; delete insert update .etc)\r\nThe limit for "notes" is 500 characters. \r\nAll information are updated except "notes"!`);
-          }
-          showAlert();
-        </script>
-      <% } %>
-      <div class="right-text">
-        <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
-        <form name="idcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id ="select-form">
-          <select name="dataCenterOner" id="dataCenterOner" style = "width: 20%;">
-            <% if (dataCenterOner != 0 ) { %>
-              <option value="<%=dataCenterOner%>"> <%=dataCenterOner%></option>
-            <% } %>
-            <option value='0'> Partner</option>
-            <% for ( let i=0 ; i<idcPartnerList.length ; i++ ) { %>
-              <option value="<%=idcPartnerList[i].dataCenterOner%>"> <%=idcPartnerList[i].dataCenterOner%></option>
-            <% } %>
-          </select>
-          <select name="vocomContactName" id="vocomContactName" style = "width: 20%;">
-            <% if (vocomContactName != 0 ) { %>
-              <option value="<%=vocomContactName%>"> <%=vocomContactName%></option>
-            <% } %>
-            <option value='0'> Manager</option>
-            <% for ( let i=0 ; i<idcManagerList.length ; i++ ) { %>
-              <option value="<%=idcManagerList[i].vocomContactName%>"> <%=idcManagerList[i].vocomContactName%></option>
-            <% } %>
-          </select>
-          <select name="remark" id="remark" style = "width: 20%;">
-            <% if (remark != 0 ) { %>
-              <option value="<%=remark%>"> <%=remark%></option>
-            <% } %>
-            <option value='0'> Remark</option>
-            <option value='Modified'> Modified</option>
-            <option value='Need modified'> Need modified	</option>
-          </select>
-          <select name="approval" id="approval" style = "width: 20%;">
-            <% if (approval != 2 ) { %>
-              <option value="<%=approval%>"> <%=approval%></option>
-            <% } %>
-            <option value='2'> Approval Status</option>
-            <option value='0'> Not approved</option>
-            <option value='1'> Approved</option>
-            <option value='-1'> Rejected</option>
-          </select>
-          <button class="btn btn-secondary my-2 my-sm-0 " type="submit" >Search <i class="fa fa-search" aria-hidden="true"></i></button>
-        </form>
-        <table
-          data-toggle="table"
-          data-sortable="true"
-          data-sort-class="table-active"
-          data-pagination="true"
-          data-page-size="5"
-          data-search="true"
-          data-show-columns="true"
-          data-show-columns-toggle-all="true"   
-          >
-          <thead class='bthead' >
-            <tr>
-              <th data-field="Partner" data-sortable="true">Partner</th>
-              <th data-field="DataCenter ID" data-sortable="true">DC ID</th>
-              <th data-field="DataCenter Name	" data-sortable="true">DC Name</th>
-              <th data-field="vocomContactName" data-sortable="true">Manager</th>
-              <th data-field="remark" data-sortable="true">Remark</th>
-              <th data-field="Approval" data-sortable="true">Approval</th>
-              <th data-field="Choose" data-sortable="true">Choose</th>
-              <%if (accountLevel == 0) { %>
-              <th data-field="Approve" data-sortable="true">Approve</th>
-              <th data-field="Reject" data-sortable="true">Reject</th>
-              <% } %>
-              <th data-field="Last Modified" data-sortable="true">Last Modified</th>
-          </tr>
-          </thead>
-          <tbody>
-            <% for(let i=0 ;i<idcList.length ;i++) {%>
-              <tr>
-                <td><%= idcList[i].dataCenterOner%></td>
-                <td><%= idcList[i].dataCenterId%></td>
-                <td><%= idcList[i].dataCenterName%></td>
-                <td><%= idcList[i].vocomContactName%></td>
-                <td><%= idcList[i].remark%></td>
-                <td><%= idcList[i].approvalStatus%></td>
-                <td><form action="/idcwebsite/modifyIdcInfo" method="post">
-                  <!-- <button type="submit" name="EM_esimStatus_refresh" value="1" class="fill">Refresh</button> -->
-                  <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="dataCenterId" value="<%= idcList[i].dataCenterId%>" style="background-color: rgb(0, 68, 255);" >Choose</button>
-                </form></td>
-                <%if (accountLevel == 0) { %>
-                <td><form action="/idcwebsite/modifyIdcInfo" method="post">
-                  <!-- <button type="submit" name="EM_esimStatus_refresh" value="1" class="fill">Refresh</button> -->
-                  <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="changeApproval" value="<%= idcList[i].dataCenterId%> 1" >Approve</button>
-                </form></td>
-                <% } %>
-                <%if (accountLevel == 0) { %>
-                  <td><form action="/idcwebsite/modifyIdcInfo" method="post">
-                    <!-- <button type="submit" name="EM_esimStatus_refresh" value="1" class="fill">Refresh</button> -->
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit" name="changeApproval" value="<%= idcList[i].dataCenterId%> -1" style="background-color: red;">Reject</button>
-                  </form></td>
-                  <% } %>
-                <td><%= idcList[i].lastModifiedAt%></td>
-              </tr>
-              <% } %>
-          </tbody>
-          </table>
-      </div>
-      <!-- IDC information here -->
-      <div class="right-text">
-        <h2 style="font-weight: bold; color: #4B363C;">IDC Information(Please click "Submit" when you finished your modification")</h2>
-        <!-- table 用 form包起來做做看 -->
-        <form name="modifyIdcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id="select-form" onsubmit="return confirm('Do you really want to submit the form?');">
-          <table
-            data-toggle="table"
-            data-sortable="true"
-            data-sort-class="table-active"
-          >
-          <thead class='bthead' >
-              <tr>
-                  
-                  <th data-field="column" data-sortable="true">Column</th>
-                  <th data-field="data" data-sortable="true">Data</th>
-                  <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                    <th data-field="modifyData" data-sortable="true">ModifyData</th>
-                  <% } %>
-                  
-                  <th data-field="remark" data-sortable="true">Remark</th>
-              </tr>
-          </thead>
-              <tbody>
-                  <tr>
-                    <td>Partner</td>
-                    <td><%= idcDetail[0].dataCenterOner%></td>
-                    <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].dataCenterOner%>" name="dataCenterOner_modify" style = "width: 100%; text-align:center" readonly></td>
-                    <% } %>
-                      <td>Can't be modified</td>
-                  </tr>
-                  <tr>
-                      <td>ID</td>
-                      <td><%= idcDetail[0].dataCenterId%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                        <td><input type="text" placeholder="<%= idcDetail[0].dataCenterId%>" name="dataCenterId_modify" style = "width: 100%; text-align:center" readonly></td>
-                        <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>DataCenter Name</td>
-                      <td><%= idcDetail[0].dataCenterName%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].dataCenterName%>" name="dataCenterName_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>Region</td>
-                      <td><%= idcDetail[0].region%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].region%>" name="continent_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>Country</td>
-                      <td><%= idcDetail[0].country%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].country%>" name="country_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>Address</td>
-                      <td><%= idcDetail[0].address%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].address%>" name="address_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>CertificationTier</td>
-                      <td><%= idcDetail[0].certificationTier%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select class="js-select2" multiple="multiple" name="certificationTier_modify" id="certificationTier_modify" style = "width: 100%; text-align:center">
-                        <% for (i=0 ; i<certificationTierList.length ;i++) { %>
-                          <option value="<%=certificationTierList[i].name %>" data-badge=""><%=certificationTierList[i].name%></option>
-                        <% } %>
-                      </select></td>
-                      <% } %>
-                      <td>Multiple selection</td>
-                    </tr>
-                    <tr>
-                      <td>ISO Certification</td>
-                      <td><%= idcDetail[0].certificationISO%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select class="js-select2" multiple="multiple" name="certificationISO_modify" id="certificationISO_modify" style = "width: 100%; text-align:center">
-                        <% for (i=0 ; i<certificationISOList.length ;i++) { %>
-                          <option value="<%=certificationISOList[i].name %>" data-badge=""><%=certificationISOList[i].name%></option>
-                        <% } %>
-                      </select></td>
-                      <% } %>
-                      <td>Multiple selection</td>
-                    </tr>
-                    <tr>
-                      <td>Total Power</td>
-                      <td><%= idcDetail[0].powerTotal_MW%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="powerTotal_MW" name="powerTotal_MW_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Megawatt</td>
-                    </tr>
-                    <tr>
-                      <td>Avail Power</td>
-                      <td><%= idcDetail[0].powerAvail_MW%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="powerAvail_MW" name="powerAvail_MW_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Megawatt</td>
-                    </tr>
-                    <tr>
-                      <td>Dual Power Supply</td>
-                      <td><%= idcDetail[0].powerDualSupply%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select name="powerDualSupply_modify" id="powerDualSupply_modify" style = "width: 100%; text-align:center">
-                        <option value='-2'> No update</option>
-                        <option value='0'> Not comfirmed</option>
-                        <option value='1'> Yes</option>
-                        <option value='-1'> No</option>
-                      </select></td>
-                      <% } %>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>N+1 Backup</td>
-                      <td><%= idcDetail[0].nPlusOneBackUp%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select name="nPlusOneBackUp_modify" id="nPlusOneBackUp_modify" style = "width: 100%; text-align:center">
-                        <option value='-2'> No update</option>
-                        <option value='0'> Not comfirmed</option>
-                        <option value='1'> Yes</option>
-                        <option value='-1'> No</option>
-                      </select></td>
-                      <% } %>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>Fuel Tank Capacity(Liters)</td>
-                      <td><%= idcDetail[0].fuelTankCap_Liters%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="fuelTankCap_Liters" name="fuelTankCap_Liters_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Liter</td>
-                    </tr>
-                    <tr>
-                      <td>Fuel Tank Capacity(Hours)</td>
-                      <td><%= idcDetail[0].fuelTankCap_hour%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="fuelTankCap_hour" name="fuelTankCap_hour_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Hour</td>
-                    </tr>
-                    <tr>
-                      <td>UPS</td>
-                      <td><%= idcDetail[0].upsOutageSustain_min%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="upsOutageSustain_min" name="upsOutageSustain_min_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Minutes</td>
-                    </tr>
-                    <tr>
-                      <td>Dual Fiber Entry</td>
-                      <td><%= idcDetail[0].fiberDualEntry%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select name="fiberDualEntry_modify" id="fiberDualEntry_modify" style = "width: 100%; text-align:center">
-                        <option value='-2'> No update</option>
-                        <option value='0'> Not comfirmed</option>
-                        <option value='1'> Yes</option>
-                        <option value='-1'> No</option>
-                      </select></td>
-                      <% } %>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>Expansion</td>
-                      <td><%= idcDetail[0].potentExpan%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select name="potentExpan_modify" id="potentExpan_modify" style = "width: 100%; text-align:center">
-                        <option value='-2'> No update</option>
-                        <option value='0'> Not comfirmed</option>
-                        <option value='1'> Yes</option>
-                        <option value='-1'> No</option>
-                      </select></td>
-                      <% } %>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>Expansion Date</td>
-                      <td><%= idcDetail[0].potentExpanDate%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select name="potentExpanDate_modify" id="potentExpanDate_modify" style = "width: 100%; text-align:center">
-                        <option value='-1'> No update</option>
-                        <option value='Not comfirmed'> Not comfirmed</option>
-                        <%for (let i=0;i<dateList.length ; i++) { %>
-                          <option value="<%=dateList[i]%>"><%=dateList[i]%></option>
-                        <% } %> 
-                      </select></td>
-                      <% } %>
-                      <td>Year/Quarter</td>
-                    </tr>
-                    <tr>
-                      <td>Expansion Power</td>
-                      <td><%= idcDetail[0].potentExpanPower_MW%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="potentExpanPower_MW" name="potentExpanPower_MW_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Megawatt</td>
-                    </tr>
-                    <tr>
-                      <td>Power Price (KWH)</td>
-                      <td><%= idcDetail[0].powerPrice_KW_Hour%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.001" min="0" placeholder="powerPrice_KW_Hour" name="powerPrice_KW_Hour_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>USD/KWH</td>
-                    </tr>
-                    <tr>
-                      <td>Power Price (KWMonth)</td>
-                      <td><%= idcDetail[0].powerPrice_KW_Month%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.001" min="0" placeholder="powerPrice_KW_Month" name="powerPrice_KW_Month_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>USD/KWMonth</td>
-                    </tr>
-                    <tr>
-                      <td>Price All In</td>
-                      <td><%= idcDetail[0].price_AllIn %></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.001" min="0" placeholder="price_AllIn" name="price_AllIn_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>USD/KWH/Space</td>
-                    </tr>
-                    <tr>
-                      <td>Space Price</td>
-                      <td><%= idcDetail[0].spacePrice_KW%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="spacePrice_KW" name="spacePrice_KW_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>USD/Kilowatt</td>
-                    </tr>
-                    <tr>
-                      <td>Rack Price</td>
-                      <td><%= idcDetail[0].rackMRC%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="rackMRC" name="rackMRC_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>USD/Month</td>
-                    </tr>
-                    <tr>
-                      <td>priceMRC</td>
-                      <td><%= idcDetail[0].priceMRC%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="priceMRC" name="priceMRC_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>USD</td>
-                    </tr>
-                    <tr>
-                      <td>Price per KWh</td>
-                      <td><%= idcDetail[0].pricePerKWh%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="pricePerKWh" name="pricePerKWh_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>USD</td>
-                    </tr>
-                    <tr>
-                      <td>Max Power per Rack(LC)</td>
-                      <td><%= idcDetail[0].rackMax_KW_LC%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="rackMax_KW_LC" name="rackMax_KW_LC_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Liquid Cooling(kilowatt)</td>
-                    </tr>
-                    <tr>
-                      <td>Max Power per Rack(AC)</td>
-                      <td><%= idcDetail[0].rackMax_KW_AC%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="rackMax_KW_AC" name="rackMax_KW_AC_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Air Cooling(kilowatt)</td>
-                    </tr>
-                    <tr>
-                      <td>PUE</td>
-                      <td><%= idcDetail[0].PUE%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="PUE" name="PUE_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Number</td>
-                    </tr>
-                    <tr>
-                      <td>Total Racks</td>
-                      <td><%= idcDetail[0].rackTotal%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="rackTotal" name="rackTotal_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Number</td>
-                    </tr>
-                    <tr>
-                      <td>Avail Racks</td>
-                      <td><%= idcDetail[0].rackAvail%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.01" min="0" placeholder="rackAvail" name="rackAvail_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Number</td>
-                    </tr>
-                    <tr>
-                      <td>Liquid Cooling</td>
-                      <td><%= idcDetail[0].liquidCoolingReady%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select name="liquidCoolingReady_modify" id="liquidCoolingReady_modify" style = "width: 100%; text-align:center">
-                        <option value='-2'> No update</option>
-                        <option value='0'> Not comfirmed</option>
-                        <option value='1'> Yes</option>
-                        <option value='-1'> No</option>
-                      </select></td>
-                      <% } %>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>Liquid Cooling Ready Date</td>
-                      <td><%= idcDetail[0].liquidCoolingReadyDate%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><select name="liquidCoolingReadyDate_modify" id="liquidCoolingReadyDate_modify" style = "width: 100%; text-align:center">
-                        <option value='-1'> No update</option>
-                        <option value='Not comfirmed'> Not comfirmed</option>
-                        <%for (let i=0;i<dateList.length ; i++) { %>
-                          <option value="<%=dateList[i]%>"><%=dateList[i]%></option>
-                        <% } %> 
-                      </select></td>
-                      <% } %>
-                      <td>Year/Quarter</td>
-                    </tr>
-                    <tr>
-                      <td>Min Contract Term</td>
-                      <td><%= idcDetail[0].minContractTerm%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="0.1" min="0" placeholder="minContractTerm" name="minContractTerm_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Years</td>
-                    </tr>
-                    <tr>
-                      <td>Reservation Requirement</td>
-                      <td><%= idcDetail[0].reservationRequirement%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="number" step="1" min="0" placeholder="Reservation" name="reservationRequirement_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td>Months</td>
-                    </tr>
-                    <%if (accountLevel <= 1) { %>
-                      <tr>
-                        <td>CountractSigned</td>
-                        <td><%= idcDetail[0].countractSigned%></td>
-                        <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                        <td><input type="text" placeholder="countractSigned" name="countractSigned_modify" style = "width: 100%; text-align:center" readonly></td>
-                        <% } %>
-                        <td>Yes : 1, No : -1, not comfirmed : 0(Can't be modified)</td>
-                      </tr>
-                      <tr>
-                        <td>Commission</td>
-                        <td><%= idcDetail[0].commission%></td>
-                        <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                        <td><input type="text" placeholder="commission" name="commission_modify" style = "width: 100%; text-align:center" readonly></td>
-                        <% } %>
-                        <td>Percentage(Can't be modified)</td>
-                      </tr>
-                    <% } %>
-                    <tr>
-                      <td>Notes</td>
-                      <td><%= idcDetail[0].notes%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="notes" name="notes_modify" style = "width: 100%; text-align:center"></td>
-                      <% } %>
-                      <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="">Detail Information</button></td>
-                    </tr>
-                    <tr>
-                      <td>Partner Contact</td>
-                      <td><%= idcDetail[0].partnerContactName%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].partnerContactName%>" name="partnerContactName_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>Partner Phone</td>
-                      <td><%= idcDetail[0].partnerContactPhone%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].partnerContactPhone%>" name="partnerContactPhone_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>Partner Email</td>
-                      <td><%= idcDetail[0].partnerContactEmail%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].partnerContactEmail%>" name="partnerContactEmail_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>Vocom Contact</td>
-                      <td><%= idcDetail[0].vocomContactName%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].vocomContactName%>" name="vocomContactName_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>Vocom Email</td>
-                      <td><%= idcDetail[0].vocomContactEmail%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="<%= idcDetail[0].vocomContactEmail%>" name="vocomContactEmail_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>Can't be modified</td>
-                    </tr>
-                    <tr>
-                      <td>Created on</td>
-                      <td><%= idcDetail[0].createdAt%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="createdAt" name="createdAt_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>date</td>
-                    </tr>
-                    <tr>
-                      <td>Last Modified</td>
-                      <td><%= idcDetail[0].lastModifiedAt%></td>
-                      <% if (idcDetail[0].vocomContactName == account.substr(5) || account == idcDetail[0].dataCenterOner || account == 'VOCOM') { %>
-                      <td><input type="text" placeholder="lastModifiedAt" name="lastModifiedAt_modify" style = "width: 100%; text-align:center" readonly></td>
-                      <% } %>
-                      <td>date</td>
-                    </tr>
-              </tbody>
-          </table>
-          </br>
-          <div style="text-align: right; padding: 10px 0;">
-            <button class="btn btn-secondary my-2 my-sm-0 " type="submit" style ="background-color: rgb(114, 114, 255); margin-right: 20px;">Submit</button>
-          </div>
-        </form>
-      </div>
-      <div class="spacer"></div>
-    </div>
-  </div> 
-  
+  <div class="modal fade" id="idcDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style = 'z-index: 10000;'>
+   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+       </div>
+       <div class="modal-body">
+         <form>
+           <div class="form-group">
+             <input type="text" class="form-control" id="recipient-name">
+           </div>
+         </form>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       </div>
+     </div>
+   </div>
+ </div>
+ <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style = 'z-index: 10000;'>
+   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+       </div>
+       <div class="modal-body">
+         <form>
+           <div class="form-group">
+             <input type="text" class="form-control" id="recipient-name">
+           </div>
+         </form>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       </div>
+     </div>
+   </div>
+ </div>
+ <div>
+   <%- include navbar.ejs %>
+   <input type ="checkbox" id="right-text-switch">
+   <div class="right-text-container">
+     <% if ( error == 1) { %>
+       <script type="text/javascript">
+         showAlert = function() {
+           alert(`Special characters and words is not allowed!(!@#$%^&*+{}:&gt&lt?; delete insert update .etc)\r\nThe limit for "notes" is 500 characters. \r\nAll information are updated except "notes"!`);
+         }
+         showAlert();
+       </script>
+     <% } %>
+     <div class="right-text">
+       <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
+       <form name="idcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id ="select-form">
+         <select name="dataCenterOner" id="dataCenterOner" style = "width: 20%;">
+           <option value='0'> Partner</option>
+           <% for ( let i=0 ; i<idcPartnerList.length ; i++ ) { %>
+             <option value="<%=idcPartnerList[i].dataCenterOner%>" <%if (idcPartnerList[i].dataCenterOner == dataCenterOner ) { %> selected <% } %>> <%=idcPartnerList[i].dataCenterOner%></option>
+           <% } %>
+         </select>
+         <select name="vocomContactName" id="vocomContactName" style = "width: 20%;">
+           <option value='0'> Manager</option>
+           <% for ( let i=0 ; i<idcManagerList.length ; i++ ) { %>
+             <option value="<%=idcManagerList[i].vocomContactName%>" <%if (idcManagerList[i].vocomContactName == vocomContactName ) { %> selected <% } %>> <%=idcManagerList[i].vocomContactName%></option>
+           <% } %>
+         </select>
+         <select name="remark" id="remark" style = "width: 20%;">
+           <option value='0' <%if (remark == 0 ) { %> selected <% } %>> Remark</option>
+           <option value='Modified' <%if (remark == 'Modified' ) { %> selected <% } %>> Modified</option>
+           <option value='Need modified' <%if (remark == 'Need modified' ) { %> selected <% } %>> Need modified	</option>
+         </select>
+         <select name="approval" id="approval" style = "width: 20%;">
+           <option value='2' <%if (approval == 2 ) { %> selected <% } %>> Approval Status</option>
+           <option value='0' <%if (approval == 0 ) { %> selected <% } %>> Not approved</option>
+           <option value='1' <%if (approval == 1 ) { %> selected <% } %>> Approved</option>
+           <option value='-1' <%if (approval == -1 ) { %> selected <% } %>> Rejected</option>
+         </select>
+         <button class="btn btn-secondary my-2 my-sm-0 " type="submit" >Search <i class="fa fa-search" aria-hidden="true"></i></button>
+       </form>
+       <table
+         data-toggle="table"
+         data-sortable="true"
+         data-sort-class="table-active"
+         data-pagination="true"
+         data-page-size="5"
+         data-search="true"
+         data-show-columns="true"
+         data-show-columns-toggle-all="true"   
+         >
+         <thead class='bthead' >
+           <tr>
+             <th data-field="Partner" data-sortable="true">Partner</th>
+             <th data-field="DataCenter ID" data-sortable="true">DC ID</th>
+             <th data-field="DataCenter Name	" data-sortable="true">DC Name</th>
+             <th data-field="vocomContactName" data-sortable="true">Manager</th>
+             <th data-field="remark" data-sortable="true">Remark</th>
+             <th data-field="Approval" data-sortable="true">Approval</th>
+             <th data-field="Detail" data-sortable="true">Detail</th>
+             <th data-field="Last Modified" data-sortable="true">Last Modified</th>
+         </tr>
+         </thead>
+         <tbody>
+           <% for(let i=0 ;i<idcList.length ;i++) {%>
+             <tr>
+               <td><%= idcList[i].dataCenterOner%></td>
+               <td><%= idcList[i].dataCenterId%></td>
+               <td><%= idcList[i].dataCenterName%></td>
+               <td><%= idcList[i].vocomContactName%></td>
+               <td><%= idcList[i].remark%></td>
+               <td><%= idcList[i].approvalStatus%></td>
+               <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#idcDetail" data-whatever="<%= idcList[i].dataCenterId %>">Detail</button></td>
+               <td><%= idcList[i].lastModifiedAt%></td>
+             </tr>
+             <% } %>
+         </tbody>
+         </table>
+     </div>
+
+     <div class="spacer"></div>
+   </div>
+ </div> 
+ 
 </body>
 
 </html>
@@ -636,97 +168,251 @@
 <script>
 var $jq = jQuery.noConflict();
 $jq(document).ready(function() {
-    $jq(".js-select2").select2({
-        closeOnSelect : false,
-        placeholder : "Please select your configuration.",
-        allowHtml: true,
-        allowClear: true,
-        tags: true,
+   $jq(".js-select2").select2({
+       closeOnSelect : false,
+       placeholder : "Please select your configuration.",
+       allowHtml: true,
+       allowClear: true,
+       tags: true,
 
-    });
+   });
 
-    function iformat(icon, badge) {
-        var originalOption = icon.element;
-        var originalOptionBadge = $jq(originalOption).data('badge');
-        return $jq('<span><i class="fa ' + $jq(originalOption).data('icon') + '"></i> ' + icon.text + '<span class="badge">' + originalOptionBadge + '</span></span>');
-    }
-    $('#exampleModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget) // Button that triggered the modal
-      
-      let output = "<ul> special characters and words is not allowed(!@#$%^&*+{}:&gt&lt?; delete insert update .etc) The limit for 'notes' is 500 characters.";
-      
+   function iformat(icon, badge) {
+       var originalOption = icon.element;
+       var originalOptionBadge = $jq(originalOption).data('badge');
+       return $jq('<span><i class="fa ' + $jq(originalOption).data('icon') + '"></i> ' + icon.text + '<span class="badge">' + originalOptionBadge + '</span></span>');
+   }
+   $('#exampleModal').on('show.bs.modal', function (event) {
+     var button = $(event.relatedTarget) // Button that triggered the modal
+     
+     let output = "<ul> special characters and words is not allowed(!@#$%^&*+{}:&gt&lt?; delete insert update .etc) The limit for 'notes' is 500 characters.";
+     
 
 
-      output += "</ul>";
-      var modal = $(this)
-      modal.find('.modal-title').text(' IDC information')
-      modal.find('.modal-body').html(output)
-  })
-  $('#idcDetail').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget) // Button that triggered the modal
-      var recipient = button.data('whatever') // Extract info from data-* attributes
-      const idcInformation = <%- JSON.stringify(idcList) %>;
-      let keyMap = new Map([
-        ['dataCenterId','ID'],
-        ['country','Country'],
-        ['certificationTier','CertificationTier'],
-        ['certificationISO','ISO Certification'],
-        ['powerTotal_MW','Total Power (MW)'],
-        ['powerAvail_MW','Avail Power (MW)'],
-        ['powerDualSupply','Dual Power Supply'],
-        ['nPlusOneBackUp','+1 Backup'],
-        ['fuelTankCap_Liters','Fuel Tank Capacity (Liters)'],
-        ['fuelTankCap_hour','Fuel Tank Capacity (Hours)'],
-        ['upsOutageSustain_min','UPS (Mins)'],
-        ['fiberDualEntry','Dual Fiber Entry'],
-        ['potentExpan','Expansion'],
-        ['potentExpanDate','Expansion Date'],
-        ['potentExpanPower_MW','Expansion Power (MW)'],
-        ['powerPrice_KW_Hour','Power Price (USD/KWH)'],
-        ['powerPrice_KW_Month','Power Price (USD/KWMonth)'],
-        ['spacePrice_KW','Space Price (USD/KW)'],
-        ['rackMRC','Rack Price (USD/Month)'],
-        ['priceMRC','priceMRC'],
-        ['pricePerKWh','Price per KWh'],
-        ['rackMax_KW_LC','Max Power per Rack(LC/KW)'],
-        ['rackMax_KW_AC','Max Power per Rack(AC/KW)'],
-        ['PUE','PUE'],
-        ['rackTotal','Total Racks'],
-        ['rackAvail','Avail Racks'],
-        ['liquidCoolingReady','Liquid Cooling'],
-        ['liquidCoolingReadyDate','Liquid Cooling Ready Date'],
-        ['minContractTerm','Min Contract Term'],
-        ['reservationRequirement','Reservation Requirement'],
-        ['notes','Notes'],
-        ['vocomContactName','Vocom Contact'],
-        ['vocomContactEmail','Vocom Email'],
-        ['createdAt','Created on'],
-        ['lastModifiedAt','Last Modified'],
-      ])
-      let output = "<ul>";
-      for(let i = 0 ; i<idcInformation.length ; i++){
-        
-          if(idcInformation[i].dataCenterId == recipient){
-              for (const [key, value] of Object.entries(idcInformation[i])) {
-                let mappedKey = keyMap.get(key) || key;
-                if(mappedKey == 'Reservation Requirement'){
-                  output += '<li><strong style="display:inline-block; min-width:220px;">' + mappedKey + ":</strong> " + value +' months'+ "</li>";
-                }else{
-                  output += '<li><strong style="display:inline-block; min-width:220px;">' + mappedKey + ":</strong> " + value + "</li>";
-                }
-                
-              }
-            break;
-          }
-      }
-      output += "</ul>";
-      var modal = $(this)
-      modal.find('.modal-title').text(recipient + ' IDC information')
-      modal.find('.modal-body').html(output)
-  })
+     output += "</ul>";
+     var modal = $(this)
+     modal.find('.modal-title').text(' IDC information')
+     modal.find('.modal-body').html(output)
+ })
+ $('#idcDetail').on('show.bs.modal', function (event) {
+     var button = $(event.relatedTarget) // Button that triggered the modal
+     var recipient = button.data('whatever') // Extract info from data-* attributes
+     var account =  <%- JSON.stringify(account) %>;
+     var accountLevel = <%- JSON.stringify(accountLevel) %>;
+     var dateList = <%- JSON.stringify(dateList) %>;
+     var certificationTierList = <%- JSON.stringify(certificationTierList) %>;
+     var certificationISOList = <%- JSON.stringify(certificationISOList) %>;
+     const idcInformation = <%- JSON.stringify(idcList) %>;
+     let keyMap = new Map([
+       ['dataCenterId','ID;readonly;'],
+       ['dataCenterOner','DataCenter Oner;readonly;'],
+       ['region','Region;readonly;'],
+       ['country','Country;readonly;'],
+       ['certificationTier','CertificationTier;multiselect;Multiple selection'],
+       ['certificationISO','ISO Certification;multiselect;Multiple selection'],
+       ['powerTotal_MW','Total Power (MW);input;Megawatt'],
+       ['powerAvail_MW','Avail Power (MW);input;Megawatt'],
+       ['powerDualSupply','Dual Power Supply;select;'],
+       ['nPlusOneBackUp','+1 Backup;select;'],
+       ['fuelTankCap_Liters','Fuel Tank Capacity (Liters);input;Liter'],
+       ['fuelTankCap_hour','Fuel Tank Capacity (Hours);input;Hour'],
+       ['upsOutageSustain_min','UPS (Mins);input;Minutes'],
+       ['fiberDualEntry','Dual Fiber Entry;select;'],
+       ['potentExpan','Expansion;select;'],
+       ['potentExpanDate','Expansion Date;dateselect;Year/Quarter'],
+       ['potentExpanPower_MW','Expansion Power (MW);input;Megawatt'],
+       ['powerPrice_KW_Hour','Power Price (USD/KWH);input;USD/KWH'],
+       ['powerPrice_KW_Month','Power Price (USD/KWMonth);input;USD/KWMonth'],
+       ['spacePrice_KW','Space Price (USD/KW);input;USD/Space'],
+       ['price_AllIn','Price All In;input;USD/KWH/Space'],
+       ['rackMRC','Rack Price (USD/Month);input;USD/Month'],
+       ['priceMRC','priceMRC;input;USD'],
+       ['pricePerKWh','Price per KWh;input;USD'],
+       ['rackMax_KW_LC','Max Power per Rack(LC/KW);input;Liquid Cooling(kilowatt)'],
+       ['rackMax_KW_AC','Max Power per Rack(AC/KW);input;Air Cooling(kilowatt)'],
+       ['PUE','PUE;input;'],
+       ['rackTotal','Total Racks;input;'],
+       ['rackAvail','Avail Racks;input;'],
+       ['liquidCoolingReady','Liquid Cooling;select;'],
+       ['liquidCoolingReadyDate','Liquid Cooling Ready Date;dateselect;Year/Quarter'],
+       ['countractSigned','Contract Signed;select;'],
+       ['commission','Commission;input;Percentage'],
+       ['notes','Notes;textarea;'],
+       ['dataCenterName','DataCenter Name;readonly;'],
+       ['partnerContactName','Partner Contact;readonly;'],
+       ['partnerContactPhone','Partner Phone;readonly;'],
+       ['partnerContactEmail','Partner Email;readonly;'],
+       ['vocomContactName','Vocom Contact;readonly;'],
+       ['vocomContactEmail','Vocom Email;readonly;'],
+       ['minContractTerm','Min Contract Term;input;Years'],
+       ['reservationRequirement','Reservation Requirement;input;Months'],
+       ['approval','Approval;approve;'],
+       ['createdAt','Created on;readonly;'],
+       ['lastModifiedAt','Last Modified;readonly;'],
+     ])
+     let tmp = [];
+     for(let i = 0 ; i<idcInformation.length ; i++){
+         if(idcInformation[i].dataCenterId == recipient){
+             tmp[0] = idcInformation[i];
+           break;
+         }
+     }
+     let output = `<form name="modifyIdcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id="select-form" onsubmit="return confirm('Do you really want to submit the form?');">
+         <table
+           data-toggle="table"
+           data-sortable="true"
+           data-sort-class="table-active"
+         >
+         <thead class='bthead' >
+             <tr>
+                 <th data-field="column" data-sortable="true">Column</th>
+                 <th data-field="modifyData" data-sortable="true">ModifyData</th>
+                 <th data-field="remark" data-sortable="true">Remark</th>
+             </tr>
+         </thead>
+             <tbody>
+                 <tr>`
+     for (const [key, value] of Object.entries(tmp[0])) {
+         let mappedKey = keyMap.get(key) || key;
+         if(mappedKey.split(';')[1] == 'readonly'){
+
+           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+           output += `<td><input type="text" name="` + key + `_modify" style = "width: 100%; text-align:center" value="` + tmp[0][key] + `" readonly></td>`
+           output += `<td>` + mappedKey.split(';')[2] + `</td>`
+           output += `</tr>`
+
+         }else if (mappedKey.split(';')[1] == 'input'){
+
+           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+           if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+             output += `<td><input type="number" step="0.1" name="` + key + `_modify" style = "width: 100%; text-align:center" value="` + tmp[0][key] + `"></td>`
+           }else{
+             output += `<td><input type="number" step="0.1" name="` + key + `_modify" style = "width: 100%; text-align:center" value="` + tmp[0][key] + `" readonly></td>`
+           }
+           output += `<td>` + mappedKey.split(';')[2] + `</td>`
+           output += `</tr>`
+
+         }else if (mappedKey.split(';')[1] == 'select'){
+
+           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+           if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center">`
+           }else{
+             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center" disabled>`
+           }
+           output += `<option value='0'`
+           if(tmp[0][key] == 0){
+             output += `selected`
+           }
+           output += `> Not comfirmed</option>`
+           output += `<option value='1'`
+           if(tmp[0][key] == 1){
+             output += `selected`
+           }
+           output += `> Yes</option>`
+           output += `<option value='-1'`
+           if(tmp[0][key] == -1){
+             output += `selected`
+           }
+           output += `> No</option>`
+           output += `<td>` + mappedKey.split(';')[2] + `</td>`
+           output += `</tr>`
+
+         }else if (mappedKey.split(';')[1] == 'dateselect'){
+
+           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+           if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center">`
+           }else{
+             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center" disabled>`
+           }
+           for(let i=0 ; i<dateList.length ; i++) {
+             if(tmp[0][key] == dateList[i]){
+               output += `<option value='`+ dateList[i] + `' selected> `+ dateList[i] + `</option>`
+             }else{
+               output += `<option value='`+ dateList[i] + `'> `+ dateList[i] + `</option>`
+             }
+           }
+           output += `<td>` + mappedKey.split(';')[2] + `</td>`
+           output += `</tr>`
+
+         }else if (mappedKey.split(';')[1] == 'multiselect'){
+     
+           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+           if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+             output += `<td><select class="js-select2" multiple="multiple" name="` + key + `_modify" style = "width: 100%; text-align:center">`
+           }else{
+             output += `<td><select class="js-select2" multiple="multiple" name="` + key + `_modify" style = "width: 100%; text-align:center" disabled>`
+           }
+           if(key == 'certificationTier'){
+             for(let i=0 ; i < certificationTierList.length ; i++) {
+               if(tmp[0][key].includes(certificationTierList[i].name)){
+                 output += `<option value='`+ certificationTierList[i].name + `'data-badge="" selected> `+ certificationTierList[i].name + `</option>`
+               }else{
+                 output += `<option value='`+ certificationTierList[i].name + `'data-badge="" > `+ certificationTierList[i].name + `</option>`
+               }
+             }
+           }else if(key == 'certificationISO'){
+             for(let i=0 ; i<certificationISOList.length ; i++) {
+               if(tmp[0][key].includes(certificationISOList[i].name)){
+                 output += `<option value='`+ certificationISOList[i].name + `' data-badge="" selected> `+ certificationISOList[i].name + `</option>`
+               }else{
+                 output += `<option value='`+ certificationISOList[i].name + `' data-badge=""> `+ certificationISOList[i].name + `</option>`
+               }
+             }
+           }
+           output += `<td>` + mappedKey.split(';')[2] + `</td>`
+           output += `</tr>`
+
+         }else if (mappedKey.split(';')[1] == 'textarea'){
+           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+           if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+             output += `<td><textarea name="` + key + `_modify" style = "width: 100%; text-align:center" >` + tmp[0][key] + `</textarea></td>`
+           }else{
+             output += `<td><textarea name="` + key + `_modify" style = "width: 100%; text-align:center" readonly>` + tmp[0][key] + `</textarea></td>`
+           }
+           output += `<td>` + mappedKey.split(';')[2] + `</td>`
+           output += `</tr>`
+         }else if(mappedKey.split(';')[1] == 'approve'){
+           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+           if (accountLevel == 0){
+             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center">`
+           }else{
+             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center" disabled>`
+           }
+           output += `<option value='0'`
+           if(tmp[0][key] == 0){
+             output += `selected`
+           }
+           output += `> Not approved</option>`
+           output += `<option value='1'`
+           if(tmp[0][key] == 1){
+             output += `selected`
+           }
+           output += `> Approved</option>`
+           output += `<option value='-1'`
+           if(tmp[0][key] == -1){
+             output += `selected`
+           }
+           output += `> Reject</option>`
+           output += `<td>` + mappedKey.split(';')[2] + `</td>`
+           output += `</tr>`
+         }
+     }
+     output += `</tbody>
+             </table>
+             </br>
+             <div style="text-align: right; padding: 10px 0;">
+               <button class="btn btn-secondary my-2 my-sm-0 " type="submit" style ="background-color: rgb(114, 114, 255); margin-right: 20px;">Submit</button>
+             </div>
+           </form>`
+     
+     var modal = $(this)
+     modal.find('.modal-title').text(recipient + ' IDC information')
+     modal.find('.modal-body').html(output)
+ })
 
 });
 </script> 
-
 
 
