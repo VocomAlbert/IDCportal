@@ -4,6 +4,7 @@ const Mail = require('../idc_mail.js');
 const excel = require('exceljs');
 const wb = new excel.Workbook();
 const FS = require('fs');
+require('dotenv').config({ path: PATH.resolve(__dirname, '../.env') });
 
 module.exports.getIdc_Info = async function (powerPrice_KW_Hour, powerPrice_KW_Month, price_AllIn, powerAvail_MW, rackAvail, region, country) {
     let data;
@@ -504,7 +505,7 @@ module.exports.mailWishList = async function (
     )
 
     let message = {
-        to: `albert@vocom.com`,
+        to: `${process.env.IDC_REQUIREMENT}`,
         subject: `New IDC request from ${account}!`,
         html: `
         <h1>Information</h1>
