@@ -3,186 +3,211 @@
 
 <head>
   <meta charset="UTF-8">
-    <title>IDC</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="http://103.178.37.3:4001/img/vocom3.png" type="image/png">
+    <title>VOCOM -IDC-</title>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.4/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="stylesheet" href="http://103.178.37.3:4001/css/navbar.css">
     <link rel="stylesheet" href="http://103.178.37.3:4001/css/style.css">
     <link rel="stylesheet" href="http://103.178.37.3:4001/css/dropdown.css">
-   
 
+    <style>
+      .modal-body{
+        position: relative;
+        padding-bottom: 0px;
+      }
 
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
-
-
+      .modal-button{
+        background-color: #FFFFFF;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        position: sticky;
+        bottom: 0;
+        right: 0;
+      }
+    </style>
 </head>
 
 <body>
-  <div class="modal fade" id="idcDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style = 'z-index: 10000;'>
-   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-       </div>
-       <div class="modal-body">
-         <form>
-           <div class="form-group">
-             <input type="text" class="form-control" id="recipient-name">
-           </div>
-         </form>
-       </div>
-       <div class="modal-footer">
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-       </div>
-     </div>
-   </div>
- </div>
- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style = 'z-index: 10000;'>
-   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-         </button>
-       </div>
-       <div class="modal-body">
-         <form>
-           <div class="form-group">
-             <input type="text" class="form-control" id="recipient-name">
-           </div>
-         </form>
-       </div>
-       <div class="modal-footer">
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-       </div>
-     </div>
-   </div>
- </div>
- <div>
-   <%- include navbar.ejs %>
-   <input type ="checkbox" id="right-text-switch">
-   <div class="right-text-container">
-     <% if ( error == 1) { %>
-       <script type="text/javascript">
-         showAlert = function() {
-           alert(`Special characters and words is not allowed!(!@#$%^&*+{}:&gt&lt?; delete insert update .etc)\r\nThe limit for "notes" is 500 characters. \r\nAll information are updated except "notes"!`);
-         }
-         showAlert();
-       </script>
-     <% } %>
-     <div class="right-text">
-       <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
-       <form name="idcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id ="select-form">
-         <select name="dataCenterOner" id="dataCenterOner" style = "width: 20%;">
-           <option value='0'> Partner</option>
-           <% for ( let i=0 ; i<idcPartnerList.length ; i++ ) { %>
-             <option value="<%=idcPartnerList[i].dataCenterOner%>" <%if (idcPartnerList[i].dataCenterOner == dataCenterOner ) { %> selected <% } %>> <%=idcPartnerList[i].dataCenterOner%></option>
-           <% } %>
-         </select>
-         <select name="vocomContactName" id="vocomContactName" style = "width: 20%;">
-           <option value='0'> Manager</option>
-           <% for ( let i=0 ; i<idcManagerList.length ; i++ ) { %>
-             <option value="<%=idcManagerList[i].vocomContactName%>" <%if (idcManagerList[i].vocomContactName == vocomContactName ) { %> selected <% } %>> <%=idcManagerList[i].vocomContactName%></option>
-           <% } %>
-         </select>
-         <select name="remark" id="remark" style = "width: 20%;">
-           <option value='0' <%if (remark == 0 ) { %> selected <% } %>> Remark</option>
-           <option value='Modified' <%if (remark == 'Modified' ) { %> selected <% } %>> Modified</option>
-           <option value='Need modified' <%if (remark == 'Need modified' ) { %> selected <% } %>> Need modified	</option>
-         </select>
-         <select name="approval" id="approval" style = "width: 20%;">
-           <option value='2' <%if (approval == 2 ) { %> selected <% } %>> Approval Status</option>
-           <option value='0' <%if (approval == 0 ) { %> selected <% } %>> Not approved</option>
-           <option value='1' <%if (approval == 1 ) { %> selected <% } %>> Approved</option>
-           <option value='-1' <%if (approval == -1 ) { %> selected <% } %>> Rejected</option>
-         </select>
-         <button class="btn btn-secondary my-2 my-sm-0 " type="submit" >Search <i class="fa fa-search" aria-hidden="true"></i></button>
-       </form>
-       <table
-         data-toggle="table"
-         data-sortable="true"
-         data-sort-class="table-active"
-         data-pagination="true"
-         data-page-size="5"
-         data-search="true"
-         data-show-columns="true"
-         data-show-columns-toggle-all="true"   
-         >
-         <thead class='bthead' >
-           <tr>
-             <th data-field="Partner" data-sortable="true">Partner</th>
-             <th data-field="DataCenter ID" data-sortable="true">DC ID</th>
-             <th data-field="DataCenter Name	" data-sortable="true">DC Name</th>
-             <th data-field="vocomContactName" data-sortable="true">Manager</th>
-             <th data-field="remark" data-sortable="true">Remark</th>
-             <th data-field="Approval" data-sortable="true">Approval</th>
-             <th data-field="Detail" data-sortable="true">Detail</th>
-             <th data-field="Last Modified" data-sortable="true">Last Modified</th>
-         </tr>
-         </thead>
-         <tbody>
-           <% for(let i=0 ;i<idcList.length ;i++) {%>
-             <tr>
-               <td><%= idcList[i].dataCenterOner%></td>
-               <td><%= idcList[i].dataCenterId%></td>
-               <td><%= idcList[i].dataCenterName%></td>
-               <td><%= idcList[i].vocomContactName%></td>
-               <td><%= idcList[i].remark%></td>
-               <td><%= idcList[i].approvalStatus%></td>
-               <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#idcDetail" data-whatever="<%= idcList[i].dataCenterId %>">Detail</button></td>
-               <td><%= idcList[i].lastModifiedAt%></td>
-             </tr>
-             <% } %>
-         </tbody>
-         </table>
-     </div>
+  <div class="modal fade" id="idcDetail" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="idcDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="idcDetailLabel">New message</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" id="recipient-name">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control" id="recipient-name">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <%- include navbar.ejs %>
+    <input type ="checkbox" id="right-text-switch">
+    <div class="right-text-container">
+      <% if ( error == 1) { %>
+        <script type="text/javascript">
+          showAlert = function() {
+            alert(`Special characters and words is not allowed!(!@#$%^&*+{}:&gt&lt?; delete insert update .etc)\r\nThe limit for "notes" is 500 characters. \r\nAll information are updated except "notes"!`);
+          }
+          showAlert();
+        </script>
+      <% } %>
+      <div class="right-text">
+        <form class="row g-2 align-items-end" name="idcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id ="select-form">
+          <div class="input-item col">
+            <label>Partner</label>
+            <select class="form-select w-100" name="dataCenterOner" id="dataCenterOner">
+              <option value='0'>All</option>
+              <% for ( let i=0 ; i<idcPartnerList.length ; i++ ) { %>
+                <option value="<%=idcPartnerList[i].dataCenterOner%>" <%if (idcPartnerList[i].dataCenterOner == dataCenterOner ) { %> selected <% } %>> <%=idcPartnerList[i].dataCenterOner%></option>
+              <% } %>
+            </select>
+          </div>
+          <div class="input-item col">
+            <label>Manager</label>
+            <select class="form-select w-100" name="vocomContactName" id="vocomContactName">
+              <option value='0'>All</option>
+              <% for ( let i=0 ; i<idcManagerList.length ; i++ ) { %>
+                <option value="<%=idcManagerList[i].vocomContactName%>" <%if (idcManagerList[i].vocomContactName == vocomContactName ) { %> selected <% } %>> <%=idcManagerList[i].vocomContactName%></option>
+              <% } %>
+            </select>
+          </div>
+          <div class="input-item col">
+            <label>Remark</label>
+            <select class="form-select w-100" name="remark" id="remark">
+              <option value='0' <%if (remark == 0 ) { %> selected <% } %>>All</option>
+              <option value='Modified' <%if (remark == 'Modified' ) { %> selected <% } %>> Modified</option>
+              <option value='Need modified' <%if (remark == 'Need modified' ) { %> selected <% } %>> Need modified	</option>
+            </select>
+          </div>
+          <div class="input-item col">
+            <label>Approval</label>
+            <select class="form-select w-100" name="approval" id="approval">
+              <option value='2' <%if (approval == 2 ) { %> selected <% } %>>All</option>
+              <option value='0' <%if (approval == 0 ) { %> selected <% } %>> Not approved</option>
+              <option value='1' <%if (approval == 1 ) { %> selected <% } %>> Approved</option>
+              <option value='-1' <%if (approval == -1 ) { %> selected <% } %>> Rejected</option>
+            </select>
+          </div>
+          <div class="col">
+            <button class="btn btn-primary" type="submit">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              Search
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="right-text">
+        <table
+          data-toggle="table"
+          data-sortable="true"
+          data-sort-class="table-active"
+          data-pagination="true"
+          data-page-size="5"
+          data-search="true"
+          data-show-toggle="true"
+          data-show-columns="true"
+          data-show-columns-toggle-all="true"   
+          >
+          <thead class='bthead' >
+            <tr>
+              <th data-field="Partner" data-sortable="true">Partner</th>
+              <th data-field="DataCenter ID" data-sortable="true">DC ID</th>
+              <th data-field="DataCenter Name	" data-sortable="true">DC Name</th>
+              <th data-field="vocomContactName" data-sortable="true">Manager</th>
+              <th data-field="remark" data-sortable="true">Remark</th>
+              <th data-field="Approval" data-sortable="true">Approval</th>
+              <th data-field="Last Modified" data-sortable="true">Last Modified</th>
+              <th data-field="Detail"></th>
+          </tr>
+          </thead>
+          <tbody>
+            <% for(let i=0 ;i<idcList.length ;i++) {%>
+              <tr>
+                <td><%= idcList[i].dataCenterOner%></td>
+                <td><%= idcList[i].dataCenterId%></td>
+                <td><%= idcList[i].dataCenterName%></td>
+                <td><%= idcList[i].vocomContactName%></td>
+                <td><%if( idcList[i].remark == 'Modified'){ %>
+                  <span class="badge rounded-pill badge-success"><%= idcList[i].remark%></span>
+                  <% } else { %> 
+                    <span class="badge rounded-pill badge-pending"><%= idcList[i].remark%></span>
+                  <% } %>
+                </td>
+                <td><%if( idcList[i].approvalStatus == 'Approved'){ %>
+                  <span class="badge rounded-pill badge-success"><%= idcList[i].approvalStatus %></span>
+                  <% } else if( idcList[i].approvalStatus == 'Not approved' ){ %> 
+                    <span class="badge rounded-pill badge-pending"><%= idcList[i].approvalStatus %></span>
+                  <% } else { %>
+                    <span class="badge rounded-pill badge-reject"><%= idcList[i].approvalStatus %></span>
+                  <% } %>
+                </td>
+  
+                <td><%= idcList[i].lastModifiedAt%></td>
+                <td><button type="button" class="btn btn-outline-primary btn-icon" data-bs-toggle="modal" data-bs-target="#idcDetail" data-whatever="<%= idcList[i].dataCenterId %>"><i class="fa-solid fa-pen"></i></button>
+                </td>
+              </tr>
+              <% } %>
+          </tbody>
+          </table>
+      </div>
+    </div>
+  </div> 
+  
 
-     <div class="spacer"></div>
-   </div>
- </div> 
- 
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.4/dist/bootstrap-table.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
 </body>
 
 </html>
 
 <script>
+
 var $jq = jQuery.noConflict();
 $jq(document).ready(function() {
-   $jq(".js-select2").select2({
-       closeOnSelect : false,
-       placeholder : "Please select your configuration.",
-       allowHtml: true,
-       allowClear: true,
-       tags: true,
-
-   });
-
-   function iformat(icon, badge) {
+  function iformat(icon, badge) {
        var originalOption = icon.element;
        var originalOptionBadge = $jq(originalOption).data('badge');
        return $jq('<span><i class="fa ' + $jq(originalOption).data('icon') + '"></i> ' + icon.text + '<span class="badge">' + originalOptionBadge + '</span></span>');
-   }
-   $('#exampleModal').on('show.bs.modal', function (event) {
+  }
+  
+  $jq('#exampleModal').on('show.bs.modal', function (event) {
      var button = $(event.relatedTarget) // Button that triggered the modal
      
      let output = "<ul> special characters and words is not allowed(!@#$%^&*+{}:&gt&lt?; delete insert update .etc) The limit for 'notes' is 500 characters.";
@@ -193,8 +218,9 @@ $jq(document).ready(function() {
      var modal = $(this)
      modal.find('.modal-title').text(' IDC information')
      modal.find('.modal-body').html(output)
- })
- $('#idcDetail').on('show.bs.modal', function (event) {
+  });
+  
+  $jq('#idcDetail').on('show.bs.modal', function (event) {
      var button = $(event.relatedTarget) // Button that triggered the modal
      var recipient = button.data('whatever') // Extract info from data-* attributes
      var account =  <%- JSON.stringify(account) %>;
@@ -210,26 +236,26 @@ $jq(document).ready(function() {
        ['country','Country;readonly;'],
        ['certificationTier','CertificationTier;multiselect;Multiple selection'],
        ['certificationISO','ISO Certification;multiselect;Multiple selection'],
-       ['powerTotal_MW','Total Power (MW);input;Megawatt'],
-       ['powerAvail_MW','Avail Power (MW);input;Megawatt'],
+       ['powerTotal_MW','Total Power;input;Megawatt'],
+       ['powerAvail_MW','Avail Power;input;Megawatt'],
        ['powerDualSupply','Dual Power Supply;select;'],
        ['nPlusOneBackUp','+1 Backup;select;'],
-       ['fuelTankCap_Liters','Fuel Tank Capacity (Liters);input;Liter'],
-       ['fuelTankCap_hour','Fuel Tank Capacity (Hours);input;Hour'],
-       ['upsOutageSustain_min','UPS (Mins);input;Minutes'],
+       ['fuelTankCap_Liters','Fuel Tank Capacity;input;Liter'],
+       ['fuelTankCap_hour','Fuel Tank Capacity;input;Hour'],
+       ['upsOutageSustain_min','UPS;input;Minutes'],
        ['fiberDualEntry','Dual Fiber Entry;select;'],
        ['potentExpan','Expansion;select;'],
        ['potentExpanDate','Expansion Date;dateselect;Year/Quarter'],
-       ['potentExpanPower_MW','Expansion Power (MW);input;Megawatt'],
-       ['powerPrice_KW_Hour','Power Price (USD/KWH);input;USD/KWH'],
-       ['powerPrice_KW_Month','Power Price (USD/KWMonth);input;USD/KWMonth'],
-       ['spacePrice_KW','Space Price (USD/KW);input;USD/Space'],
+       ['potentExpanPower_MW','Expansion Power;input;Megawatt'],
+       ['powerPrice_KW_Hour','Power Price(KWH);input;USD/KWH'],
+       ['powerPrice_KW_Month','Power Price(KWMonth);input;USD/KWMonth'],
+       ['spacePrice_KW','Space Price;input;USD/Space'],
        ['price_AllIn','Price All In;input;USD/KWH/Space'],
-       ['rackMRC','Rack Price (USD/Month);input;USD/Month'],
-       ['priceMRC','priceMRC;input;USD'],
+       ['rackMRC','Rack Price;input;USD/Month'],
+       ['priceMRC','PriceMRC;input;USD'],
        ['pricePerKWh','Price per KWh;input;USD'],
-       ['rackMax_KW_LC','Max Power per Rack(LC/KW);input;Liquid Cooling(kilowatt)'],
-       ['rackMax_KW_AC','Max Power per Rack(AC/KW);input;Air Cooling(kilowatt)'],
+       ['rackMax_KW_LC','Max Power per Rack;input;Liquid Cooling(kilowatt)'],
+       ['rackMax_KW_AC','Max Power per Rack;input;Air Cooling(kilowatt)'],
        ['PUE','PUE;input;'],
        ['rackTotal','Total Racks;input;'],
        ['rackAvail','Avail Racks;input;'],
@@ -237,7 +263,7 @@ $jq(document).ready(function() {
        ['liquidCoolingReadyDate','Liquid Cooling Ready Date;dateselect;Year/Quarter'],
        ['countractSigned','Contract Signed;select;'],
        ['commission','Commission;input;Percentage'],
-       ['notes','Notes;textarea;'],
+       ['notes','Notes;textarea;Special characters and certain words are not allowed(!@#$%^&*+{}:&gt&lt?； delete, insert, update, etc.) The maximum length is 500 characters.'],
        ['dataCenterName','DataCenter Name;readonly;'],
        ['partnerContactName','Partner Contact;readonly;'],
        ['partnerContactPhone','Partner Phone;readonly;'],
@@ -257,74 +283,68 @@ $jq(document).ready(function() {
            break;
          }
      }
-     let output = `<form name="modifyIdcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id="select-form" onsubmit="return confirm('Do you really want to submit the form?');">
-         <table
-           data-toggle="table"
-           data-sortable="true"
-           data-sort-class="table-active"
-         >
-         <thead class='bthead' >
-             <tr>
-                 <th data-field="column" data-sortable="true">Column</th>
-                 <th data-field="modifyData" data-sortable="true">ModifyData</th>
-                 <th data-field="remark" data-sortable="true">Remark</th>
-             </tr>
-         </thead>
-             <tbody>
-                 <tr>`
+     let output = `<form class="row g-3" name="modifyIdcInfo" method="post" action="/idcwebsite/modifyIdcInfo" id="select-form" onsubmit="return confirm('Do you really want to submit the form?');">`
+      if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+      output +=`<div class="error-content">
+        <i class="fa-solid fa-bell me-1"></i>
+        Please click "Submit" when you finished your modification.
+      </div>`
+     }
      for (const [key, value] of Object.entries(tmp[0])) {
          let mappedKey = keyMap.get(key) || key;
          if(mappedKey.split(';')[1] == 'readonly'){
 
-           output += `<td>` + mappedKey.split(';')[0] + `</td>`
-           output += `<td><input type="text" name="` + key + `_modify" style = "width: 100%; text-align:center" value="` + tmp[0][key] + `" readonly></td>`
-           output += `<td>` + mappedKey.split(';')[2] + `</td>`
-           output += `</tr>`
+           output += `<div class="input-item col-6">`
+           output += `<div class="input-title">` + `<label>` + mappedKey.split(';')[0] + `</label>` + `<span>` + mappedKey.split(';')[2] + `<span>` + `</div>`
+           output += `<input class="form-control" type="text" name="` + key + `_modify" value="` + tmp[0][key] + `" readonly>`
+           output += `</div>`
 
          }else if (mappedKey.split(';')[1] == 'input'){
 
-           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+           output += `<div class="input-item col-6">`
+           output += `<div class="input-title">` + `<label>` + mappedKey.split(';')[0] + `</label>` + `<span>` + mappedKey.split(';')[2] + `<span>` + `</div>`
            if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
-             output += `<td><input type="number" step="0.1" name="` + key + `_modify" style = "width: 100%; text-align:center" value="` + tmp[0][key] + `"></td>`
+             output += `<input class="form-control" type="number" step="0.1" name="` + key + `_modify" value="` + tmp[0][key] + `">`
            }else{
-             output += `<td><input type="number" step="0.1" name="` + key + `_modify" style = "width: 100%; text-align:center" value="` + tmp[0][key] + `" readonly></td>`
+             output += `<input class="form-control" type="number" step="0.1" name="` + key + `_modify" value="` + tmp[0][key] + `" readonly>`
            }
-           output += `<td>` + mappedKey.split(';')[2] + `</td>`
-           output += `</tr>`
+           output += `</div>`
 
          }else if (mappedKey.split(';')[1] == 'select'){
-
-           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+          
+           output += `<div class="input-item col-6">`
+           output += `<div class="input-title">` + `<label>` + mappedKey.split(';')[0] + `</label>` + `<span>` + mappedKey.split(';')[2] + `<span>` + `</div>`
            if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
-             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center">`
+             output += `<select class="form-select" name="` + key + `_modify">`
            }else{
-             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center" disabled>`
+             output += `<select class="form-select account-control-select" name="` + key + `_modify" disabled>`
            }
            output += `<option value='0'`
            if(tmp[0][key] == 0){
              output += `selected`
            }
-           output += `> Not comfirmed</option>`
+           output += `>Not comfirmed</option>`
            output += `<option value='1'`
            if(tmp[0][key] == 1){
              output += `selected`
            }
-           output += `> Yes</option>`
+           output += `>Yes</option>`
            output += `<option value='-1'`
            if(tmp[0][key] == -1){
              output += `selected`
            }
-           output += `> No</option>`
-           output += `<td>` + mappedKey.split(';')[2] + `</td>`
-           output += `</tr>`
+           output += `>No</option>`
+           output += `</select>`
+           output += `</div>`
 
          }else if (mappedKey.split(';')[1] == 'dateselect'){
-
-           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+          
+           output += `<div class="input-item col-6">`
+           output += `<div class="input-title">` + `<label>` + mappedKey.split(';')[0] + `</label>` + `<span>` + mappedKey.split(';')[2] + `<span>` + `</div>`
            if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
-             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center">`
+             output += `<select class="form-select" name="` + key + `_modify">`
            }else{
-             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center" disabled>`
+             output += `<select class="form-select account-control-select" name="` + key + `_modify" disabled>`
            }
            for(let i=0 ; i<dateList.length ; i++) {
              if(tmp[0][key] == dateList[i]){
@@ -333,16 +353,17 @@ $jq(document).ready(function() {
                output += `<option value='`+ dateList[i] + `'> `+ dateList[i] + `</option>`
              }
            }
-           output += `<td>` + mappedKey.split(';')[2] + `</td>`
-           output += `</tr>`
+           output += `</select>`
+           output += `</div>`
 
          }else if (mappedKey.split(';')[1] == 'multiselect'){
-     
-           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+          
+           output += `<div class="input-item col-6">`
+           output += `<div class="input-title">` + `<label>` + mappedKey.split(';')[0] + `</label>` + `<span>` + mappedKey.split(';')[2] + `<span>` + `</div>`
            if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
-             output += `<td><select class="js-select2" multiple="multiple" name="` + key + `_modify" style = "width: 100%; text-align:center">`
+             output += `<select class="form-select select-multiple" name="` + key + `_modify" data-placeholder="" multiple>`
            }else{
-             output += `<td><select class="js-select2" multiple="multiple" name="` + key + `_modify" style = "width: 100%; text-align:center" disabled>`
+             output += `<select class="form-select select-multiple" name="` + key + `_modify" data-placeholder="" multiple disabled>`
            }
            if(key == 'certificationTier'){
              for(let i=0 ; i < certificationTierList.length ; i++) {
@@ -361,24 +382,28 @@ $jq(document).ready(function() {
                }
              }
            }
-           output += `<td>` + mappedKey.split(';')[2] + `</td>`
-           output += `</tr>`
+           output += `</select>`
+           output += `</div>`
 
          }else if (mappedKey.split(';')[1] == 'textarea'){
-           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+
+           output += `<div class="input-item col-12">`
+           output += `<div class="input-title">` + `<label>` + mappedKey.split(';')[0] + `</label>` + `<span>` + mappedKey.split(';')[2] + `<span>` + `</div>`
            if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
-             output += `<td><textarea name="` + key + `_modify" style = "width: 100%; text-align:center" >` + tmp[0][key] + `</textarea></td>`
+             output += `<textarea class="form-control" name="` + key + `_modify"  style="height: 100px;" >` + tmp[0][key] + `</textarea>`
            }else{
-             output += `<td><textarea name="` + key + `_modify" style = "width: 100%; text-align:center" readonly>` + tmp[0][key] + `</textarea></td>`
+             output += `<textarea class="form-control" name="` + key + `_modify"  style="height: 100px;" readonly>` + tmp[0][key] + `</textarea>`
            }
-           output += `<td>` + mappedKey.split(';')[2] + `</td>`
-           output += `</tr>`
+           output += `</div>`
+
          }else if(mappedKey.split(';')[1] == 'approve'){
-           output += `<td>` + mappedKey.split(';')[0] + `</td>`
+          
+           output += `<div class="input-item approve-select col-12">`
+            output += `<div class="input-title">` + `<label><i class="fa-solid fa-user-check mx-1"></i>` + mappedKey.split(';')[0] + `</label>` + `<span>` + mappedKey.split(';')[2] + `<span>` + `</div>`
            if (accountLevel == 0){
-             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center">`
+             output += `<select class="form-select" name="` + key + `_modify">`
            }else{
-             output += `<td><select name="` + key + `_modify" style = "width: 100%; text-align:center" disabled>`
+             output += `<select class="form-select account-control-select" name="` + key + `_modify" disabled>`
            }
            output += `<option value='0'`
            if(tmp[0][key] == 0){
@@ -395,24 +420,35 @@ $jq(document).ready(function() {
              output += `selected`
            }
            output += `> Reject</option>`
-           output += `<td>` + mappedKey.split(';')[2] + `</td>`
-           output += `</tr>`
+           output += `</select>`
+           output += `</div>`
          }
      }
-     output += `</tbody>
-             </table>
-             </br>
-             <div style="text-align: right; padding: 10px 0;">
-               <button class="btn btn-secondary my-2 my-sm-0 " type="submit" style ="background-color: rgb(114, 114, 255); margin-right: 20px;">Submit</button>
-             </div>
-           </form>`
+     output += `<div class="col-12 d-flex justify-content-end modal-button">
+               <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>`
+     if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+      output +=`<button class="btn btn-primary ms-2" type="submit">Submit</button>`
+     }
+     output +=`</div></form>`
      
      var modal = $(this)
      modal.find('.modal-title').text(recipient + ' IDC information')
      modal.find('.modal-body').html(output)
- })
 
+     $jq( '.select-multiple' ).select2( {
+        theme: "bootstrap-5",
+        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        placeholder: $( this ).data( 'placeholder' ),
+        closeOnSelect: false,
+        allowClear: true, 
+      });
+
+      
+  });
 });
+
 </script> 
+
+
 
 

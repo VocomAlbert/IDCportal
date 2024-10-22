@@ -41,6 +41,7 @@ function Query (sql, values, type = 'boss') {
             // }
           }
           if (err) {
+            // console.log(err)
             // let message = {
             //   subject: `ERROR from Sandbox database operation!`,
             //   text: `Time:\r\n${MOMENT().format('YYYY-MM-DD HH:mm:ss')},\r\nError Message:\r\n${err.message},\r\nError Stack:\r\n${err.stack},\r\nQuery:\r\n${sql},` + `\r\nvalues:\r\n${JSON.stringify(values, null, 1)}`

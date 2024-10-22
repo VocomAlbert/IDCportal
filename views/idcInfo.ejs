@@ -3,29 +3,18 @@
 
 <head>
   <meta charset="UTF-8">
-    <title>IDC</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- <link rel="stylesheet" href="http://18.140.117.139:4001/css/table.css"> -->
+    <link rel="shortcut icon" href="http://103.178.37.3:4001/img/vocom3.png" type="image/png">
+    <title>VOCOM -IDC-</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.4/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="http://103.178.37.3:4001/css/navbar.css">
     <link rel="stylesheet" href="http://103.178.37.3:4001/css/style.css">
-    <!-- for daterangepicker -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    
     <script>
       const countryList = <%- JSON.stringify(countryList) %>;
 
@@ -65,9 +54,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form>
@@ -76,105 +63,122 @@
             </div>
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
       </div>
     </div>
   </div>
-  <div>
+  <div class="container-fluid p-0">
     <%- include navbar.ejs %>
     <input type ="checkbox" id="right-text-switch">
     <div class="right-text-container">
       <!-- selection for VOCOM & customer -->
       <% if(accountLevel <= 1 || accountLevel == 3) { %>
         <div class="right-text">
-          <h2 style="font-weight: bold; color: #4B363C;">Filter</h2>
-          <form name="idcInfo" method="post" action="/idcwebsite/idcInfo" id ="select-form">
-            <select name="powerAvail_MW" id="powerAvail_MW" style = "width: 20%;">
-              <option value="0,999" <%if (powerAvail_MW == "0,999" ) { %> selected <% } %> >All Avail Power (MW)</option>
-              <option value="0,1.5" <%if (powerAvail_MW == "0,1.5" ) { %> selected <% } %> > 0 ~ 1.5 </option>
-              <option value="1.5,3" <%if (powerAvail_MW == "1.5,3" ) { %> selected <% } %> > 1.5 ~ 3 </option>
-              <option value="3,6" <%if (powerAvail_MW == "3,6" ) { %> selected <% } %> > 3 ~ 6 </option>
-              <option value="6,12" <%if (powerAvail_MW == "6,12" ) { %> selected <% } %> > 6 ~ 12 </option>
-              <option value="12,999" <%if (powerAvail_MW == "12,999" ) { %> selected <% } %> > 12 ~ 999 </option>
-            </select>
-            <select name="powerPrice_KW_Hour" id="powerPrice_KW_Hour" style = "width: 20%;">
-              <option value="0,999" <%if (powerPrice_KW_Hour == "0,999" ) { %> selected <% } %> >All Price Per KWH</option>
-              <option value="0,0.05" <%if (powerPrice_KW_Hour == "0,0.05" ) { %> selected <% } %> > 0 ~ 0.05 </option>
-              <option value="0.05,0.075" <%if (powerPrice_KW_Hour == "0.05,0.075" ) { %> selected <% } %> > 0.05 ~ 0.075 </option>
-              <option value="0.075,0.1" <%if (powerPrice_KW_Hour == "0.075,0.1" ) { %> selected <% } %> > 0.075 ~ 0.1 </option>
-              <option value="0.1,0.15" <%if (powerPrice_KW_Hour == "0.1,0.15" ) { %> selected <% } %> > 0.1 ~ 0.15 </option>
-              <option value="0.15,0.2" <%if (powerPrice_KW_Hour == "0.15,0.2" ) { %> selected <% } %> > 0.15 ~ 0.2 </option>
-              <option value="0.2,999" <%if (powerPrice_KW_Hour == "0.2,999" ) { %> selected <% } %> > 0.2 ~ 999 </option>
-            </select>
-            <select name="powerPrice_KW_Month" id="powerPrice_KW_Month" style = "width: 20%;">
-              <option value="0,999" <%if (powerPrice_KW_Month == "0,999" ) { %> selected <% } %> >All Price Per KWMonth</option>
-              <option value="0,50" <%if (powerPrice_KW_Month == "0,50" ) { %> selected <% } %> > 0 ~ 50 </option>
-              <option value="50,100" <%if (powerPrice_KW_Month == "50,100" ) { %> selected <% } %> > 50 ~ 100 </option>
-              <option value="100,150" <%if (powerPrice_KW_Month == "100,150" ) { %> selected <% } %> > 100 ~ 150 </option>
-              <option value="150,200" <%if (powerPrice_KW_Month == "150,200" ) { %> selected <% } %> > 150 ~ 200 </option>
-              <option value="200,999" <%if (powerPrice_KW_Month == "200,999" ) { %> selected <% } %> > 200 ~ 999 </option>
-            </select>
-            <select name="price_AllIn" id="price_AllIn" style = "width: 20%;">
-              <option value="0,999" <%if (price_AllIn == "0,999" ) { %> selected <% } %> >All Price_All_In </option>
-              <option value="0,150" <%if (price_AllIn == "0,150" ) { %> selected <% } %> > 0 ~ 150 </option>
-              <option value="150,200" <%if (price_AllIn == "150,200" ) { %> selected <% } %> > 150 ~ 200 </option>
-              <option value="200,250" <%if (price_AllIn == "200,250" ) { %> selected <% } %> > 200 ~ 250 </option>
-              <option value="250,999" <%if (price_AllIn == "250,999" ) { %> selected <% } %> > 250 ~ 999 </option>
-            </select>
-            <br><br>
-            <select name="rackAvail" id="rackAvail" style = "width: 20%;">
-              <option value="0,9999" <%if (rackAvail == "0,9999" ) { %> selected <% } %> >All Avail Racks</option>
-              <option value="0,500" <%if (rackAvail == "0,500" ) { %> selected <% } %> > 0 ~ 500 </option>
-              <option value="500,1000" <%if (rackAvail == "500,1000" ) { %> selected <% } %> > 500 ~ 1000 </option>
-              <option value="1000,9999" <%if (rackAvail == "1000,9999" ) { %> selected <% } %> > 1000 ~ 9999 </option>
-            </select>
-            <select name="region" id="region" style = "width: 20%;" onchange="updateSecondSelect()">
-              <option value="-1">All region</option>  
-              <% for (let i=0; i<RegionList.length ;i++) {%>
-                <option value="<%=RegionList[i].region%>" <%if (RegionList[i].region == region ) { %> selected <% } %> ><%=RegionList[i].region%></option>
-              <%}%>
-            </select>
-            <select  name="country" id="country" style = "width: 20%;">
-              <option value="-1">All country</option>
-              <% for (let i=0; i<countryList.length ;i++) {%>
-                <option value="<%=countryList[i].countryName%>" <%if (countryList[i].countryName == country ) { %> selected <% } %> ><%=countryList[i].countryName%></option>
-              <%}%>
-            </select>
-            
-            <button class="btn btn-secondary my-2 my-sm-0 " type="submit" >Search<i class="fa fa-search" aria-hidden="true"></i></button>
+          <form class="row g-2 align-items-end" name="idcInfo" method="post" action="/idcwebsite/idcInfo" id ="select-form">
+            <div class="input-item col-3">
+              <label>Avail Power(MW)</label>
+              <select class="form-select w-100" name="powerAvail_MW" id="powerAvail_MW">
+                <option value="0,999" <%if (powerAvail_MW == "0,999" ) { %> selected <% } %> >All</option>
+                <option value="0,1.5" <%if (powerAvail_MW == "0,1.5" ) { %> selected <% } %> > 0 ~ 1.5 </option>
+                <option value="1.5,3" <%if (powerAvail_MW == "1.5,3" ) { %> selected <% } %> > 1.5 ~ 3 </option>
+                <option value="3,6" <%if (powerAvail_MW == "3,6" ) { %> selected <% } %> > 3 ~ 6 </option>
+                <option value="6,12" <%if (powerAvail_MW == "6,12" ) { %> selected <% } %> > 6 ~ 12 </option>
+                <option value="12,999" <%if (powerAvail_MW == "12,999" ) { %> selected <% } %> > 12 ~ 999 </option>
+              </select>
+            </div>
+            <div class="input-item col-3">
+              <label>Price Per KWH</label>
+              <select class="form-select w-100" name="powerPrice_KW_Hour" id="powerPrice_KW_Hour">
+                <option value="0,999" <%if (powerPrice_KW_Hour == "0,999" ) { %> selected <% } %> >All</option>
+                <option value="0,0.05" <%if (powerPrice_KW_Hour == "0,0.05" ) { %> selected <% } %> > 0 ~ 0.05 </option>
+                <option value="0.05,0.075" <%if (powerPrice_KW_Hour == "0.05,0.075" ) { %> selected <% } %> > 0.05 ~ 0.075 </option>
+                <option value="0.075,0.1" <%if (powerPrice_KW_Hour == "0.075,0.1" ) { %> selected <% } %> > 0.075 ~ 0.1 </option>
+                <option value="0.1,0.15" <%if (powerPrice_KW_Hour == "0.1,0.15" ) { %> selected <% } %> > 0.1 ~ 0.15 </option>
+                <option value="0.15,0.2" <%if (powerPrice_KW_Hour == "0.15,0.2" ) { %> selected <% } %> > 0.15 ~ 0.2 </option>
+                <option value="0.2,999" <%if (powerPrice_KW_Hour == "0.2,999" ) { %> selected <% } %> > 0.2 ~ 999 </option>
+              </select>
+            </div>
+            <div class="input-item col-3">
+              <label>Price Per KWMonth</label>
+              <select class="form-select w-100" name="powerPrice_KW_Month" id="powerPrice_KW_Month">
+                <option value="0,999" <%if (powerPrice_KW_Month == "0,999" ) { %> selected <% } %> >All</option>
+                <option value="0,50" <%if (powerPrice_KW_Month == "0,50" ) { %> selected <% } %> > 0 ~ 50 </option>
+                <option value="50,100" <%if (powerPrice_KW_Month == "50,100" ) { %> selected <% } %> > 50 ~ 100 </option>
+                <option value="100,150" <%if (powerPrice_KW_Month == "100,150" ) { %> selected <% } %> > 100 ~ 150 </option>
+                <option value="150,200" <%if (powerPrice_KW_Month == "150,200" ) { %> selected <% } %> > 150 ~ 200 </option>
+                <option value="200,999" <%if (powerPrice_KW_Month == "200,999" ) { %> selected <% } %> > 200 ~ 999 </option>
+              </select>
+            </div>
+            <div class="input-item col-3">
+              <label>Price All In</label>
+              <select class="form-select w-100" name="price_AllIn" id="price_AllIn">
+                <option value="0,999" <%if (price_AllIn == "0,999" ) { %> selected <% } %> >All</option>
+                <option value="0,150" <%if (price_AllIn == "0,150" ) { %> selected <% } %> > 0 ~ 150 </option>
+                <option value="150,200" <%if (price_AllIn == "150,200" ) { %> selected <% } %> > 150 ~ 200 </option>
+                <option value="200,250" <%if (price_AllIn == "200,250" ) { %> selected <% } %> > 200 ~ 250 </option>
+                <option value="250,999" <%if (price_AllIn == "250,999" ) { %> selected <% } %> > 250 ~ 999 </option>
+              </select>
+            </div>
+            <div class="input-item col-3">
+              <label>Avail Racks</label>
+              <select class="form-select w-100" name="rackAvail" id="rackAvail">
+                <option value="0,9999" <%if (rackAvail == "0,9999" ) { %> selected <% } %> >All</option>
+                <option value="0,500" <%if (rackAvail == "0,500" ) { %> selected <% } %> > 0 ~ 500 </option>
+                <option value="500,1000" <%if (rackAvail == "500,1000" ) { %> selected <% } %> > 500 ~ 1000 </option>
+                <option value="1000,9999" <%if (rackAvail == "1000,9999" ) { %> selected <% } %> > 1000 ~ 9999 </option>
+              </select>
+            </div>
+            <div class="input-item col-3">
+              <label>Region</label>
+              <select class="form-select w-100" name="region" id="region" onchange="updateSecondSelect()">
+                <option value="-1">All</option>  
+                <% for (let i=0; i<RegionList.length ;i++) {%>
+                  <option value="<%=RegionList[i].region%>" <%if (RegionList[i].region == region ) { %> selected <% } %> ><%=RegionList[i].region%></option>
+                <%}%>
+              </select>
+            </div>
+            <div class="input-item col-3">
+              <label>Country</label>
+              <select class="form-select w-100" name="country" id="country">
+                <option value="-1">All</option>
+                <% for (let i=0; i<countryList.length ;i++) {%>
+                  <option value="<%=countryList[i].countryName%>" <%if (countryList[i].countryName == country ) { %> selected <% } %> ><%=countryList[i].countryName%></option>
+                <%}%>
+              </select>
+            </div>
+            <div class="col">
+              <button class="btn btn-primary" type="submit">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                Search
+              </button>
+            </div>
           </form>
-          <br>
         </div>
       <% } %>
       <!-- IDC information here -->
       <div class="right-text">
         <% if (flag) { %>
-          <h2 style="font-weight: bold; color: #4B363C;">IDC Information</h2>
             <table
               data-toggle="table"
               data-sortable="true"
               data-sort-class="table-active"
               data-pagination="true"
-              data-page-size="10"
+              data-page-size="5"
               data-search="true"
-              data-show-refresh="true"
               data-show-toggle="true"
               data-show-columns="true"
-              data-show-columns-toggle-all="true"         
+              data-show-columns-toggle-all="true"
             >
-            <thead class='bthead' >
+            <thead>
                 <tr>
-                    <th data-field="dataCenterId" data-sortable="true">ID</th>
-                    <th data-field="region" data-sortable="true">Region</th>
-                    <th data-field="powerAvail_MW" data-sortable="true">Avail Power (MW)</th>
-                    <th data-field="powerPrice_KW_Hour" data-sortable="true"> Price per KWH</th>
-                    <th data-field="powerPrice_KW_Month" data-sortable="true"> Price per KWM</th>
-                    <th data-field="price_AllIn" data-sortable="true"> Price All In</th>
-                    <th data-field="rackAvail" data-sortable="true">Avail Racks</th>
-                    <th data-field="lastModifiedAt" data-sortable="true">Last Modified</th>
-                    <th data-field="detailInfo" data-sortable="true">Detail Info</th>
+                    <th data-field="dataCenterId" data-sortable="true" data-width="14" data-width-unit="%" class="align-middle">ID</th>
+                    <th data-field="region" data-sortable="true" data-width="15" data-width-unit="%" class="align-middle">Region</th>
+                    <th data-field="powerAvail_MW" data-sortable="true" data-width="10" data-width-unit="%" class="align-middle">Avail Power (MW)</th>
+                    <th data-field="powerPrice_KW_Hour" data-sortable="true" data-width="10" data-width-unit="%" class="align-middle">Price per KWH</th>
+                    <th data-field="powerPrice_KW_Month" data-sortable="true" data-width="10" data-width-unit="%" class="align-middle">Price per KWM</th>
+                    <th data-field="price_AllIn" data-sortable="true" data-width="10" data-width-unit="%" class="align-middle">Price All In</th>
+                    <th data-field="rackAvail" data-sortable="true" data-width="10" data-width-unit="%" class="align-middle">Avail Racks</th>
+                    <th data-field="lastModifiedAt" data-sortable="true" data-width="15" data-width-unit="%" class="align-middle">Last Modified</th>
+                    <th data-field="detailInfo" data-width="6" data-width-unit="%"></th>
                 </tr>
             </thead>
                 <tbody>
@@ -188,87 +192,93 @@
                         <td><%= idc_info[i].price_AllIn %></td>
                         <td><%= idc_info[i].rackAvail %></td>
                         <td><%= idc_info[i].lastModifiedAt %></td>
-                        <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="<%= idc_info[i].dataCenterId %>">Detail Information</button></td>
+                        <td><button type="button" class="btn btn-outline-primary btn-icon" data-bs-toggle="modal" data-bs-target="#exampleModal" data-whatever="<%= idc_info[i].dataCenterId %>"><i class="bi bi-info-circle"></i></button></td>
                     </tr>
                     <% } %>
                 </tbody>
             </table>
         <% } else { %>
-          <h2 style="font-weight: bold; color: #4B363C;">IDC Information</h2>
-          <h3 style="font-weight: bold; color: #ff0000;">No IDC Information meet your requirement.</h3>
+          <div class="error-content">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+            No IDC Information meet your requirement.
+          </div>
         <% } %>
-        
       </div>
-      <div class="spacer"></div>
     </div>
-  </div>  
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.4/dist/bootstrap-table.min.js"></script>
+  <script>
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('whatever') // Extract info from data-* attributes
+        const idcInformation = <%- JSON.stringify(idc_info) %>;
+        let keyMap = new Map([
+          ['dataCenterId','ID'],
+          ['country','Country'],
+          ['certificationTier','CertificationTier'],
+          ['certificationISO','ISO Certification'],
+          ['powerTotal_MW','Total Power (MW)'],
+          ['powerAvail_MW','Avail Power (MW)'],
+          ['powerDualSupply','Dual Power Supply'],
+          ['nPlusOneBackUp','+1 Backup'],
+          ['fuelTankCap_Liters','Fuel Tank Capacity (Liters)'],
+          ['fuelTankCap_hour','Fuel Tank Capacity (Hours)'],
+          ['upsOutageSustain_min','UPS (Mins)'],
+          ['fiberDualEntry','Dual Fiber Entry'],
+          ['potentExpan','Expansion'],
+          ['potentExpanDate','Expansion Date'],
+          ['potentExpanPower_MW','Expansion Power (MW)'],
+          ['powerPrice_KW_Hour','Power Price (USD/KWH)'],
+          ['powerPrice_KW_Month','Power Price (USD/KWMonth)'],
+          ['spacePrice_KW','Space Price (USD/KW)'],
+          ['rackMRC','Rack Price (USD/Month)'],
+          ['priceMRC','PriceMRC'],
+          ['pricePerKWh','Price per KWh'],
+          ['rackMax_KW_LC','Max Power per Rack(LC/KW)'],
+          ['rackMax_KW_AC','Max Power per Rack(AC/KW)'],
+          ['PUE','PUE'],
+          ['rackTotal','Total Racks'],
+          ['rackAvail','Avail Racks'],
+          ['liquidCoolingReady','Liquid Cooling'],
+          ['liquidCoolingReadyDate','Liquid Cooling Ready Date'],
+          ['minContractTerm','Min Contract Term'],
+          ['reservationRequirement','Reservation Requirement'],
+          ['notes','Notes'],
+          ['vocomContactName','Vocom Contact'],
+          ['vocomContactEmail','Vocom Email'],
+          ['createdAt','Created on'],
+          ['lastModifiedAt','Last Modified'],
+        ])
+        let output = `<div class="row g-2">`;
+        for(let i = 0 ; i<idcInformation.length ; i++){
+          
+            if(idcInformation[i].dataCenterId == recipient){
+                for (const [key, value] of Object.entries(idcInformation[i])) {
+                  let mappedKey = keyMap.get(key) || key;
+                  if(mappedKey == 'Reservation Requirement'){
+                    output += `<div class="col-6"><strong>` + mappedKey + `:</strong></div>` + `<div class="col-6">` + value +` months`+ `</div>`;
+                  }else{
+                    output += `<div class="col-6"><strong>` + mappedKey + `:</strong></div>` + `<div class="col-6">` + value + `</div>`;
+                  }
+                  
+                }
+                output += `<div class="col-6"><strong>` + `VOCOM Contact` + `:</strong></div>` + `<div class="col-6">` + `Ben Chen` + `</div>`;
+                output += `<div class="col-6"><strong>` + `VOCOM Email` + `:</strong></div>` + `<div class="col-6">` + `ben.chen@vocom.com` + `</div>`;
+              break;
+            }
+        }
+        output += `</div>`;
+        var modal = $(this)
+        modal.find('.modal-title').text(recipient + ' IDC information')
+        modal.find('.modal-body').html(output)
+    })
+
+    
+  </script>
 </body>
 
 </html>
 
-<script>
-  $('#exampleModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget) // Button that triggered the modal
-      var recipient = button.data('whatever') // Extract info from data-* attributes
-      const idcInformation = <%- JSON.stringify(idc_info) %>;
-      let keyMap = new Map([
-        ['dataCenterId','ID'],
-        ['country','Country'],
-        ['certificationTier','CertificationTier'],
-        ['certificationISO','ISO Certification'],
-        ['powerTotal_MW','Total Power (MW)'],
-        ['powerAvail_MW','Avail Power (MW)'],
-        ['powerDualSupply','Dual Power Supply'],
-        ['nPlusOneBackUp','+1 Backup'],
-        ['fuelTankCap_Liters','Fuel Tank Capacity (Liters)'],
-        ['fuelTankCap_hour','Fuel Tank Capacity (Hours)'],
-        ['upsOutageSustain_min','UPS (Mins)'],
-        ['fiberDualEntry','Dual Fiber Entry'],
-        ['potentExpan','Expansion'],
-        ['potentExpanDate','Expansion Date'],
-        ['potentExpanPower_MW','Expansion Power (MW)'],
-        ['powerPrice_KW_Hour','Power Price (USD/KWH)'],
-        ['powerPrice_KW_Month','Power Price (USD/KWMonth)'],
-        ['spacePrice_KW','Space Price (USD/KW)'],
-        ['rackMRC','Rack Price (USD/Month)'],
-        ['priceMRC','priceMRC'],
-        ['pricePerKWh','Price per KWh'],
-        ['rackMax_KW_LC','Max Power per Rack(LC/KW)'],
-        ['rackMax_KW_AC','Max Power per Rack(AC/KW)'],
-        ['PUE','PUE'],
-        ['rackTotal','Total Racks'],
-        ['rackAvail','Avail Racks'],
-        ['liquidCoolingReady','Liquid Cooling'],
-        ['liquidCoolingReadyDate','Liquid Cooling Ready Date'],
-        ['minContractTerm','Min Contract Term'],
-        ['reservationRequirement','Reservation Requirement'],
-        ['notes','Notes'],
-        ['vocomContactName','Vocom Contact'],
-        ['vocomContactEmail','Vocom Email'],
-        ['createdAt','Created on'],
-        ['lastModifiedAt','Last Modified'],
-      ])
-      let output = "<ul>";
-      for(let i = 0 ; i<idcInformation.length ; i++){
-        
-          if(idcInformation[i].dataCenterId == recipient){
-              for (const [key, value] of Object.entries(idcInformation[i])) {
-                let mappedKey = keyMap.get(key) || key;
-                if(mappedKey == 'Reservation Requirement'){
-                  output += '<li><strong style="display:inline-block; min-width:220px;">' + mappedKey + ":</strong> " + value +' months'+ "</li>";
-                }else{
-                  output += '<li><strong style="display:inline-block; min-width:220px;">' + mappedKey + ":</strong> " + value + "</li>";
-                }
-                
-              }
-              output += '<li><strong style="display:inline-block; min-width:220px;">' + 'VOCOM Contact' + ":</strong> " + 'Ben Chen' + "</li>";
-              output += '<li><strong style="display:inline-block; min-width:220px;">' + 'Vocom Email' + ":</strong> " + 'ben.chen@vocom.com' + "</li>";
-            break;
-          }
-      }
-      output += "</ul>";
-      var modal = $(this)
-      modal.find('.modal-title').text(recipient + ' IDC information')
-      modal.find('.modal-body').html(output)
-  })
-</script>

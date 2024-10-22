@@ -333,6 +333,13 @@ module.exports.updateIDCinfo = async function (
         for (const [key, value] of Object.entries(needModify_number)) {
             let originalData = await Query(`select ${key} from idc_info where dataCenterId = ?`, [dataCenterId]);
             let keys = Object.keys(originalData[0]);
+
+            if (originalData && originalData.length > 0) {
+                let keys = Object.keys(originalData[0]);
+                // 其他操作
+            } else {
+                console.error("originalData is undefined or empty");
+            }
             let changeApprovalKeys = Object.keys(keyInformation_changeApproval);
             
             if(originalData[0][keys[0]] != value){
