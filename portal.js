@@ -524,6 +524,8 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.clearCookie("commission_modify");
       res.clearCookie("potentExpanDate_modify");
       res.clearCookie("notes_modify");
+      res.clearCookie("minContractTerm_modify");
+      res.clearCookie("reservationRequirement_modify");
       // res.clearCookie("changeApproval");
       res.render("modifyIdcInfo");
     }
