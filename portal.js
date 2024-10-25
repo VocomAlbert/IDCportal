@@ -101,7 +101,7 @@ app.get('/idcwebsite', async function (req, res) {
   res.clearCookie("countractSigned_modify");
   res.clearCookie("approval_modify");
   res.clearCookie("commission_modify");
-
+  res.clearCookie("clickForExcel");
   //wishList
   res.clearCookie("location_wishList");
   res.clearCookie("powerAvail_MW_wishList");
@@ -429,6 +429,8 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     res.locals.liquidCoolingReadyDate_modify = req.cookies.liquidCoolingReadyDate_modify ? req.cookies.liquidCoolingReadyDate_modify : -1;
     //text
     res.locals.notes_modify = req.cookies.notes_modify ? req.cookies.notes_modify : '';
+    //export excel
+    res.locals.clickForExcel = req.cookies.clickForExcel ? req.cookies.clickForExcel : 0;
     
     let certificationTierList = await idcFunction.getCertificationTier();
     res.locals.certificationTierList = certificationTierList;
@@ -489,6 +491,11 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
     let idcList = await idcFunction.getIdcList(res.locals.account, res.locals.accountLevel, res.locals.dataCenterOner, res.locals.vocomContactName, res.locals.remark, res.locals.approval);
     res.locals.idcList = idcList;
     
+    
+    if(res.locals.clickForExcel){
+      await idcFunction.makeIdcExcel(idcList);
+    }
+    
     if(res.locals.accountLevel == 3){
       res.redirect('/idcwebsite');
     }else{
@@ -527,6 +534,8 @@ app.get('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.clearCookie("minContractTerm_modify");
       res.clearCookie("reservationRequirement_modify");
       // res.clearCookie("changeApproval");
+      res.clearCookie("clickForExcel");
+      
       res.render("modifyIdcInfo");
     }
   } else {
@@ -761,6 +770,12 @@ app.post('/idcwebsite/modifyIdcInfo', async function (req, res) {
       res.cookie('approval_modify', req.body.approval_modify);
     }else{
       res.clearCookie("approval_modify");
+    }
+    
+    if (req.body.clickForExcel) {
+      res.cookie('clickForExcel', req.body.clickForExcel);
+    }else{
+      res.clearCookie("clickForExcel");
     }
     
     res.redirect('/idcwebsite/modifyIdcInfo');

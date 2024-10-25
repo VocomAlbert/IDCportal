@@ -154,6 +154,76 @@ module.exports.getIdcList = async function (account, level, dataCenterOner, voco
     return data;
 }
 
+module.exports.makeIdcExcel = async function (idcList) {
+    let keys = Object.keys(idcList[0])
+    let idcListExcel = new excel.Workbook();
+    let singleSelection = [
+        "powerDualSupply",
+        "nPlusOneBackUp",
+        "fiberDualEntry",
+        "potentExpan",
+        "liquidCoolingReady",
+        "countractSigned",
+        "approval"
+    ]
+
+    let worksheet = idcListExcel.addWorksheet('idc', { views: [{ state: 'frozen', ySplit: 1 }] });
+    let table = {};
+    table = {
+        name: 'IDCList',
+        ref: 'A1',
+        style: {
+            theme: 'TableStyleMedium9',
+            showRowStripes: true,
+        },
+        columns: [
+        ],
+        rows: [
+        ]
+    }
+
+    for( let i = 0; i<keys.length ; i++){
+        table.columns.push({name: keys[i], filterButton: true})
+       
+    }
+
+    for(let i = 1 ; i<idcList.length ; i++){
+        for(const [key , value] of Object.entries(idcList[i])){
+            if(singleSelection.includes(key)){
+                if(value == 0){
+                    idcList[i][key] = 'NotComfirmed'
+                }else if(value == 1){
+                    idcList[i][key] = 'Yes'
+                }else{
+                    idcList[i][key] = 'No'
+                }
+            }
+        }
+        let rowdata = []
+        for(let k = 0 ; k < keys.length ; k++){
+            rowdata.push(idcList[i][keys[k]])
+        }
+        table.rows.push(rowdata);
+    }
+
+    for (let i = 1; i < 49; i++) {
+        let column = worksheet.getColumn(i);
+        if(i>=8 && i<=35){
+            column.width = 15;
+        }else{
+            column.width = 20;
+        }
+    }
+
+    worksheet.addTable(table);
+    let filename = `IDCList.xlsx`
+    if (!FS.existsSync('./public/excel/IDCList/')) {
+        FS.mkdirSync('./public/excel/IDCList/', { recursive: true });
+    }
+    idcListExcel.xlsx.writeFile(`./public/excel/IDCList/${filename}`).then(() => { })
+
+}
+
 module.exports.getIdcPartnerList = async function (account, level) {
     let data;
     if (level <= 1) {

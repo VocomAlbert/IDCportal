@@ -132,6 +132,20 @@
         </form>
       </div>
       <div class="right-text">
+        <h4 style="font-weight: bold; color: #1E6EE4;">IDC List</h4>
+
+        <form action="/idcwebsite/modifyIdcInfo" method="post">
+          <button type="submit" name="clickForExcel" value="1" class="btn btn-secondary my-2 my-sm-0 " style="position: absolute; top: 20px; right: 25px;">Make IDC Excel
+            <i class="fa fa-table" aria-hidden="true"></i></button>
+        </form>
+        <% if(clickForExcel == 1){ %>
+          <a href="http://localhost:4001/excel/siminvoice/<%=account%>/simReport.xlsx"   download="<%=account%>_simReport.xlsx">
+            <button class="btn btn-secondary my-2 my-sm-0 " type="button" style="position: absolute; top: 20px; right: 180px;">Export
+              <i class="fa fa-table" aria-hidden="true"></i>
+            </button>
+          </a>
+        <% } %>
+        
         <table
           data-toggle="table"
           data-sortable="true"
@@ -303,10 +317,10 @@ $jq(document).ready(function() {
 
            output += `<div class="input-item col-6">`
            output += `<div class="input-title">` + `<label>` + mappedKey.split(';')[0] + `</label>` + `<span>` + mappedKey.split(';')[2] + `<span>` + `</div>`
-           if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
-             output += `<input class="form-control" type="number" step="0.1" name="` + key + `_modify" value="` + tmp[0][key] + `">`
+            if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+             output += `<input class="form-control" type="number" step="0.01" name="` + key + `_modify" value="` + tmp[0][key] + `">`
            }else{
-             output += `<input class="form-control" type="number" step="0.1" name="` + key + `_modify" value="` + tmp[0][key] + `" readonly>`
+             output += `<input class="form-control" type="number" step="0.01" name="` + key + `_modify" value="` + tmp[0][key] + `" readonly>`
            }
            output += `</div>`
 
