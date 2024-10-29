@@ -440,7 +440,7 @@ $jq(document).ready(function() {
      }
      output += `<div class="col-12 d-flex justify-content-end modal-button">
                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>`
-     if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || account == 'VOCOM'){
+     if (tmp[0].vocomContactName == account.substr(5) || account == tmp[0].dataCenterOner || accountLevel == 0){
       output +=`<button class="btn btn-primary ms-2" type="submit">Submit</button>`
      }
      output +=`</div></form>`
