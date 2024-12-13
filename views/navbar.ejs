@@ -57,11 +57,13 @@
           Modify IDC Info</a>
       </li>
     <% } %>
+    <% if (account != 'VOCOMIDC' ){%>
     <li data-page="account">
       <a href="/idcwebsite/account">
         <!-- <i class="fa fa-plane" aria-hidden="true"></i>  -->
         Account</a>
     </li>
+    <% } %>
   </ul>
   <label for="side-menu-switch right-text-switch" id="#changeWidth" onclick="toggleCheckboxes()">
     <i class="fa fa-angle-left" aria-hidden="true"></i>
